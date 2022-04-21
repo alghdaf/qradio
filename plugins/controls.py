@@ -45,7 +45,7 @@ admin_filter=filters.create(is_admin)
 async def player(client, message):
     if not Config.CALL_STATUS:
         await message.reply_text(
-            "Player is idle, start the player using below button. ㅤㅤㅤㅤ",
+            "المشغل في وضع الخمول ، ابدأ تشغيل المشغل باستخدام الزر أدناه. ㅤㅤㅤㅤ",
             disable_web_page_preview=True,
             reply_markup=await get_buttons()
         )
@@ -70,17 +70,17 @@ async def player(client, message):
 
 @Client.on_message(filters.command(["skip", f"skip@{Config.BOT_USERNAME}"]) & admin_filter & chat_filter)
 async def skip_track(_, m: Message):
-    msg=await m.reply('trying to skip from queue..')
+    msg=await m.reply('في محاولة للتخطي من قائمة الانتظار ..')
     if not Config.CALL_STATUS:
         await msg.edit(
-            "Player is idle, start the player using below button. ㅤㅤㅤㅤ",
+            "المشغل في وضع الخمول ، ابدأ تشغيل المشغل باستخدام الزر أدناه.",
             disable_web_page_preview=True,
             reply_markup=await get_buttons()
         )
         await delete_messages([m])
         return
     if not Config.playlist:
-        await msg.edit("Playlist is Empty.")
+        await msg.edit("قائمة التشغيل فارغة.")
         await delete_messages([m, msg])
         return
     if len(m.command) == 1:
@@ -93,12 +93,12 @@ async def skip_track(_, m: Message):
             items.sort(reverse=True)
             for i in items:
                 if 2 <= i <= (len(Config.playlist) - 1):
-                    await msg.edit(f"Succesfully Removed from Playlist- {i}. **{Config.playlist[i][1]}**")
+                    await msg.edit(f"أزيل بنجاح من قائمة التشغيل- {i}. **{Config.playlist[i][1]}**")
                     await clear_db_playlist(song=Config.playlist[i])
                     Config.playlist.pop(i)
                     await delete_messages([m, msg])
                 else:
-                    await msg.edit(f"You cant skip first two songs- {i}")
+                    await msg.edit(f"لا يمكنك تخطي أول أغنيتين- {i}")
                     await delete_messages([m, msg])
         except (ValueError, TypeError):
             await msg.edit("Invalid input")
@@ -116,7 +116,7 @@ async def skip_track(_, m: Message):
 async def pause_playing(_, m: Message):
     if not Config.CALL_STATUS:
         await m.reply_text(
-            "Player is idle, start the player using below button. ㅤㅤㅤㅤㅤ",
+            "المشغل في وضع الخمول ، ابدأ تشغيل المشغل باستخدام الزر أدناه. ㅤㅤㅤㅤㅤ",
             disable_web_page_preview=True,
             reply_markup=await get_buttons()
         )
@@ -135,7 +135,7 @@ async def pause_playing(_, m: Message):
 async def resume_playing(_, m: Message):
     if not Config.CALL_STATUS:
         await m.reply_text(
-            "Player is idle, start the player using below button. ㅤㅤㅤㅤㅤ",
+            "المشغل في وضع الخمول ، ابدأ تشغيل المشغل باستخدام الزر أدناه. ㅤㅤㅤㅤㅤ",
             disable_web_page_preview=True,
             reply_markup=await get_buttons()
         )
@@ -155,7 +155,7 @@ async def resume_playing(_, m: Message):
 async def set_vol(_, m: Message):
     if not Config.CALL_STATUS:
         await m.reply_text(
-            "Player is idle, start the player using below button. ㅤㅤㅤㅤㅤㅤ",
+            "المشغل في وضع الخمول ، ابدأ تشغيل المشغل باستخدام الزر أدناه. ㅤㅤㅤㅤㅤㅤ",
             disable_web_page_preview=True,
             reply_markup=await get_buttons()
         )
@@ -179,7 +179,7 @@ async def set_vol(_, m: Message):
 async def set_mute(_, m: Message):
     if not Config.CALL_STATUS:
         await m.reply_text(
-            "Player is idle, start the player using below button. ㅤㅤㅤㅤㅤㅤㅤㅤ",
+            "المشغل في وضع الخمول ، ابدأ تشغيل المشغل باستخدام الزر أدناه. ㅤㅤㅤㅤㅤㅤㅤㅤ",
             disable_web_page_preview=True,
             reply_markup=await get_buttons()
         )
@@ -201,7 +201,7 @@ async def set_mute(_, m: Message):
 async def set_unmute(_, m: Message):
     if not Config.CALL_STATUS:
         await m.reply_text(
-            "Player is idle, start the player using below button. ㅤㅤㅤㅤㅤ",
+            "المشغل في وضع الخمول ، ابدأ تشغيل المشغل باستخدام الزر أدناه. ㅤㅤㅤㅤㅤ",
             disable_web_page_preview=True,
             reply_markup=await get_buttons()
         )
@@ -226,7 +226,7 @@ async def replay_playout(client, m: Message):
     msg = await m.reply('Checking player')
     if not Config.CALL_STATUS:
         await msg.edit(
-            "Player is idle, start the player using below button. ㅤㅤㅤㅤㅤ",
+            "المشغل في وضع الخمول ، ابدأ تشغيل المشغل باستخدام الزر أدناه. ㅤㅤㅤㅤㅤ",
             disable_web_page_preview=True,
             reply_markup=await get_buttons()
         )
@@ -241,7 +241,7 @@ async def replay_playout(client, m: Message):
 async def show_player(client, m: Message):
     if not Config.CALL_STATUS:
         await m.reply_text(
-            "Player is idle, start the player using below button. ㅤㅤㅤㅤㅤ",
+            "المشغل في وضع الخمول ، ابدأ تشغيل المشغل باستخدام الزر أدناه. ㅤㅤㅤㅤㅤ",
             disable_web_page_preview=True,
             reply_markup=await get_buttons()
         )
@@ -250,14 +250,14 @@ async def show_player(client, m: Message):
     data=Config.DATA.get('FILE_DATA')
     if not data.get('dur', 0) or \
         data.get('dur') == 0:
-        title="<b>Playing Live Stream</b> ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ"
+        title="<b>البث المباشر يعمل</b> ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ"
     else:
         if Config.playlist:
             title=f"<b>{Config.playlist[0][1]}</b> ㅤㅤㅤㅤ\n ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ"
         elif Config.STREAM_LINK:
-            title=f"<b>Stream Using [Url]({data['file']}) </b> ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ"
+            title=f"<b>البث بواسطة [Url]({data['file']}) </b> ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ"
         else:
-            title=f"<b>Streaming Startup [stream]({Config.STREAM_URL})</b> ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ"
+            title=f"<b>يتم بث [البث]({Config.STREAM_URL})</b> ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ"
     if m.chat.type == "private":
         await m.reply_text(
             title,
@@ -279,17 +279,17 @@ async def show_player(client, m: Message):
 async def seek_playout(client, m: Message):
     if not Config.CALL_STATUS:
         await m.reply_text(
-            "Player is idle, start the player using below button. ㅤㅤㅤ ㅤㅤ",
+            "المشغل في وضع الخمول ، ابدأ تشغيل المشغل باستخدام الزر أدناه.  ",
             disable_web_page_preview=True,
             reply_markup=await get_buttons()
         )
         await delete_messages([m])
         return
     data=Config.DATA.get('FILE_DATA')
-    k=await m.reply("Trying to seek..")
+    k=await m.reply("Tفي محاولة للتخطي..")
     if not data.get('dur', 0) or \
         data.get('dur') == 0:
-        await k.edit("This stream cant be seeked.")
+        await k.edit("هذا البث لا يمكن التقدم فيه.")
         await delete_messages([m, k])
         return
     if ' ' in m.text:
@@ -297,7 +297,7 @@ async def seek_playout(client, m: Message):
         try:
             time=int(time)
         except:
-            await k.edit('Invalid time specified')
+            await k.edit('الوقت المحدد غير صالح')
             await delete_messages([m, k])
             return
         nyav, string=await seek_file(time)
@@ -307,24 +307,24 @@ async def seek_playout(client, m: Message):
             return
         if not data.get('dur', 0)\
             or data.get('dur') == 0:
-            title="<b>Playing Live Stream</b> ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ"
+            title="<b>تشغيل البث المباشر</b> ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ"
         else:
             if Config.playlist:
                 title=f"<b>{Config.playlist[0][1]}</b>\nㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ"
             elif Config.STREAM_LINK:
-                title=f"<b>Stream Using [Url]({data['file']})</b> ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ"
+                title=f"<b>البث بواسطة [Url]({data['file']})</b> ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ"
             else:
-                title=f"<b>Streaming Startup [stream]({Config.STREAM_URL})</b> ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ"
+                title=f"<b>يتم بث [البث]({Config.STREAM_URL})</b> ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ"
         if Config.msg.get('player'):
             await Config.msg['player'].delete()  
-        Config.msg['player'] = await k.edit(f"🎸{title}", reply_markup=await get_buttons(), disable_web_page_preview=True)
+        Config.msg['player'] = await k.edit(f"☁{title}", reply_markup=await get_buttons(), disable_web_page_preview=True)
         await delete_messages([m])
     else:
-        await k.edit('No time specified')
+        await k.edit('لم يتم تحديد وقت')
         await delete_messages([m, k])
 
 
 @Client.on_message(filters.command(["settings", f"settings@{Config.BOT_USERNAME}"]) & admin_filter & chat_filter)
 async def settings(client, m: Message):
-    await m.reply(f"Configure Your VCPlayer Settings Here. ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ", reply_markup=await settings_panel(), disable_web_page_preview=True)
+    await m.reply(f"قم بتكوين إعدادات VCPlayer هنا.", reply_markup=await settings_panel(), disable_web_page_preview=True)
     await delete_messages([m])

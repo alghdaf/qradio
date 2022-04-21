@@ -62,14 +62,14 @@ async def import_playlist(client, m: Message):
     with suppress(MessageIdInvalid, MessageNotModified):
         if m.reply_to_message is not None and m.reply_to_message.document:
             if m.reply_to_message.document.file_name != "PlayList.json":
-                k=await m.reply("Invalid PlayList file given. Export your current Playlist using /export.")
+                k=await m.reply("تم تقديم ملف قائمة تشغيل غير صالح. قم بتصدير قائمة التشغيل الحالية باستخدام /export .")
                 await delete_messages([m, k])
                 return
             myplaylist=await m.reply_to_message.download()
-            status=await m.reply("Trying to get details from playlist.")
+            status=await m.reply("أحاول الحصول على تفاصيل قائمة التشغيل.")
             n=await import_play_list(myplaylist)
             if not n:
-                await status.edit("Errors Occured while importing playlist.")
+                await status.edit("حدثت أخطاء أثناء استيراد قائمة التشغيل.")
                 await delete_messages([m, status])
                 return
             if Config.SHUFFLE:
@@ -85,5 +85,5 @@ async def import_playlist(client, m: Message):
             else:
                 await delete_messages([m, status])
         else:
-            k = await m.reply("No playList file given.")
+            k = await m.reply("لم يتم تقديم ملف لقائمة التشغيل.")
             await delete_messages([m, k])

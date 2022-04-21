@@ -240,7 +240,7 @@ async def schedule_vc(bot, message):
                     k=d    
                 f.append(InlineKeyboardButton(text=f"{k}",callback_data=f"sch_month_{year_}_{month}_{d}"))
             button.append(f)
-        button.append([InlineKeyboardButton("Close", callback_data="schclose")])
+        button.append([InlineKeyboardButton("إغلاق", callback_data="schclose")])
         await msg.edit(f"Choose the day of the month you want to schedule the voicechat.\nToday is {thisday} {smonth} {year}. Chooosing a date preceeding today will be considered as next year {year+1}", reply_markup=InlineKeyboardMarkup(button))
 
 
