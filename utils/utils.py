@@ -869,15 +869,15 @@ async def chek_the_media(link, seek=False, pic=False, title="Music"):
                 is_audio_ = False
                 LOGGER.error("Unable to get Audio properties within time.")
             if is_audio_:
-                pic_=await bot.get_messages("DumpPlaylist", 30)
-                photo = "./pic/photo"
-                if not os.path.exists(photo):
-                    photo = await pic_.download(file_name=photo)
+                pic_=await bot.get_messages("ikerw", 104)
+                photoo = "./pic/photoo"
+                if not os.path.exists(photoo):
+                    photo = await pic_.download(file_name=photoo)
                 try:
                     dur_= await get_duration(link)
                 except:
                     dur_=0
-                pic = get_image(title, photo, dur_) 
+                pic = get_image(title, photoo, dur_) 
             else:
                 Config.STREAM_LINK=False
                 if Config.playlist or Config.STREAM_LINK:
@@ -1825,7 +1825,7 @@ def get_image(title, pic, dur="Liv"):
     draw = ImageDraw.Draw(image) 
     font = ImageFont.truetype('./utils/font.ttf', 60)
     title = title[0:45]
-    MAX_W = 82
+    MAX_W = 1000
     dur=convert(int(float(dur)))
     if dur=="0:00:00":
         dur = "بث مباشر"
