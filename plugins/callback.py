@@ -108,7 +108,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
 
         elif query.data.startswith("help"):
             if query.message.chat.type != "private" and query.message.reply_to_message.from_user is None:
-                return await query.answer("لا يمكنني مساعدتك هنا ، نظرًا لأنك مشرف مجهول ، أرسل لي رسالة في محادثة خاصة.", show_alert=True)
+                return await query.answer("لا يمكنني مساعدتك هنا، نظرًا لأنك مشرف مجهول، أرسل لي رسالة في محادثة خاصة.", show_alert=True)
             elif query.message.chat.type != "private" and query.from_user.id != query.message.reply_to_message.from_user.id:
                 return await query.answer("طيب", show_alert=True)
             me, nyav = query.data.split("_")
@@ -224,7 +224,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                     else:
                         pyear=year
                     button.append([InlineKeyboardButton("عودة", callback_data=f"sch_showdate_{pyear}_{month}"), InlineKeyboardButton("إغلاق", callback_data="schclose")])
-                    await query.message.edit(f"Choose the hour of {date} {smonth} {year} to schedule  a voicechat.", reply_markup=InlineKeyboardMarkup(button))
+                    await query.message.edit(f"إخنر الساعة ل {date} {smonth} {year} لجدولة دردشة مرئية", reply_markup=InlineKeyboardMarkup(button))
 
             elif data.startswith("sch_day"):
                 none, none, year, month, day, hour = data.split("_")
@@ -249,7 +249,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                         k.append(InlineKeyboardButton(text=f"{d}",callback_data=f"sch_minute_{year}_{month}_{day}_{hour}_{d}"))
                     button.append(k)
                 button.append([InlineKeyboardButton("عودة", callback_data=f"sch_month_{year}_{month}_{day}"), InlineKeyboardButton("إغلاق", callback_data="schclose")])
-                await query.message.edit(f"اختر دقيقة من {hour} الساعة في {day} {month} {year} لجدولة الدردشة الصوتية.", reply_markup=InlineKeyboardMarkup(button))
+                await query.message.edit(f"اختر دقيقة في الساعة {hour} في {day} {month} {year} لجدولة الدردشة المرئية.", reply_markup=InlineKeyboardMarkup(button))
 
             elif data.startswith("sch_minute"):
                 none, none, year, month, day, hour, minute = data.split("_")
@@ -261,7 +261,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 datetime_object = datetime.datetime.strptime(str(month), "%m")
                 smonth = datetime_object.strftime("%B")
                 if year == today.year and month == today.month and day == today.day and hour == today.hour and minute <= today.minute:
-                    await query.answer("ليس لدي آلة زمن سحرية لأذهب إلى الماضي !!!.")
+                    await query.answer("ليس لدي آلة زمنية سحرية لأذهب إلى الماضي !!!.")
                     return 
                 final=f"{day}th {smonth} {year} at {hour}:{minute}"
                 button=[

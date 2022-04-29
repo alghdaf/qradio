@@ -58,19 +58,19 @@ class Config:
 
     #Optional Configuration
     SHUFFLE=is_enabled(os.environ.get("SHUFFLE", 'True'))
-    ADMIN_ONLY=is_enabled(os.environ.get("ADMIN_ONLY", "False"))
+    ADMIN_ONLY=is_enabled(os.environ.get("ADMIN_ONLY", "True"))
     REPLY_MESSAGE=os.environ.get("REPLY_MESSAGE", False)
-    EDIT_TITLE = os.environ.get("EDIT_TITLE", True)
+    EDIT_TITLE = os.environ.get("EDIT_TITLE", False)
     #others
     
     RECORDING_DUMP=os.environ.get("RECORDING_DUMP", False)
     RECORDING_TITLE=os.environ.get("RECORDING_TITLE", False)
     TIME_ZONE = os.environ.get("TIME_ZONE", "Asia/Kolkata")    
-    IS_VIDEO=is_enabled(os.environ.get("IS_VIDEO", 'True'))
+    IS_VIDEO=is_enabled(os.environ.get("IS_VIDEO", 'False'))
     IS_LOOP=is_enabled(os.environ.get("IS_LOOP", 'True'))
     DELAY=int(os.environ.get("DELAY", '10'))
     PORTRAIT=is_enabled(os.environ.get("PORTRAIT", 'False'))
-    IS_VIDEO_RECORD=is_enabled(os.environ.get("IS_VIDEO_RECORD", 'True'))
+    IS_VIDEO_RECORD=is_enabled(os.environ.get("IS_VIDEO_RECORD", 'False'))
     DEBUG=is_enabled(os.environ.get("DEBUG", 'False'))
     PTN=is_enabled(os.environ.get("PTN", "False"))
 
@@ -114,7 +114,7 @@ class Config:
     MUTED=False
     HAS_SCHEDULE=None
     IS_ACTIVE=None
-    VOLUME=100
+    VOLUME=111
     CURRENT_CALL=None
     BOT_USERNAME=None
     USER_ID=None
@@ -135,8 +135,8 @@ class Config:
         LOGGER.info("Title Editing turned off")
     if REPLY_MESSAGE:
         REPLY_MESSAGE=REPLY_MESSAGE
-        REPLY_PM=True
-        LOGGER.info("Reply Message Found, Enabled PM MSG")
+        REPLY_PM=False
+        LOGGER.info("Reply Message Found, dsEbled PM MSG")
     else:
         REPLY_MESSAGE=False
         REPLY_PM=False
@@ -194,187 +194,165 @@ class Config:
 
 
     #help strings 
-    PLAY_HELP="""
-__You can play using any of these options__
+    PLAY_HELP="""__إليك عزيزي / عزيزتي تعليمات.__
 
-1. Play a video from a YouTube link.
-Command: **/play**
-__You can use this as a reply to a YouTube link or pass link along command. or as a reply to message to search that in YouTube.__
+1. قم بتشغيل مقطع فيديو من رابط YouTube.
+الأمر: ** / play **
+__يمكنك استخدام هذا كرد على رابط YouTube أو تمرير الرابط على طول الأمر. أو كرد على رسالة للبحث عن ذلك في YouTube .__
 
-2. Play from a telegram file.
-Command: **/play**
-__Reply to a supported media(video and documents or audio file ).__
-Note: __For both the cases /fplay also can be used by admins to play the song immediately without waiting for queue to end.__
+2. التشغيل من ملف تيليجرام.
+الأمر: ** / play **
+__بالرد على الوسائط المدعومة (فيديو ومستندات أو ملف صوتي) .__
+ملاحظة: __للكل من الحالتين / يمكن أيضًا استخدام fplay بواسطة المشرفين لتشغيل الأغنية على الفور دون انتظار انتهاء قائمة الانتظار .__
 
-3. Play from a YouTube playlist
-Command: **/yplay**
-__First get a playlist file from @GetPlaylistBot or @DumpPlaylist and reply to playlist file.__
+3. تشغيل من قائمة تشغيل يوتيوب
+الأمر: ** / yplay **
+__أولاً احصل على ملف قائمة التشغيل من @Ourpybot وبالرد على ملف قائمة التشغيل .__
 
-4. Live Stream
-Command: **/stream**
-__Pass a live stream URL or any direct URL to play it as stream.__
+4. البث المباشر
+الأمر: ** / stream**
+__مرر عنوان URL من يوتيوب للبث المباشر أو أي عنوان مباشر لتشغيله كبث .__
 
-5. Import an old playlist.
-Command: **/import**
-__Reply to a previously exported playlist file. __
+5. استيراد قائمة تشغيل قديمة.
+الأمر: ** / import **
+__ بالرد على ملف قائمة تشغيل تم تصديره مسبقًا. __
 
-6. Channel Play
-Command: **/cplay**
-__Use `/cplay channel username or channel id` to play all the files from the given channel.
-By default both video files and documents will be played . You can add or remove the file type using `FILTERS` var. 
-For example , to stream audio, video and document from the channel use `/env FILTERS video document audio` . If you need only audio , you can use `/env FILTERS video audio` and so on.
-To set up the files from a channel as STARTUP_STREAM, so that the files will be automatically added to playlist on startup of bot. use `/env STARTUP_STREAM channel username or channel id`
+6. تشغيل من قناة تيليجرام
+الأمر: ** / cplay **
+__استخدام `/ cplay channel username أو channel id` لتشغيل جميع الملفات من القناة المحددة.
+سيتم تشغيل ملفات الفيديو والمستندات بشكل افتراضي. يمكنك إضافة نوع الملف أو إزالته باستخدام var.
+على سبيل المثال، لبث الصوت والفيديو والمستندات من القناة ، استخدم `/ env FILTERS video document audio`.  إذا كنت بحاجة إلى صوت فقط ، `/ env FILTERS video audio` وهكذا.
+لإعداد الملفات من قناة كـ STARTUP_STREAM ، بحيث تتم إضافة الملفات تلقائيًا إلى قائمة التشغيل عند بدء تشغيل الروبوت. استخدم `/ env STARTUP_STREAM اسم مستخدم القناة أو معرف القناة`
 
-Note that for public channels you should use username of channels along with '@' and for private channels you should use channel id.
-For private channels , make sure both the bot and USER account is a member of channel.__
+لاحظ أنه بالنسبة للقنوات العامة ، يجب استخدام اسم مستخدم للقنوات مع "@" وبالنسبة للقنوات الخاصة ، يجب استخدام معرف القناة.
+للقنوات الخاصة ، تأكد من أن كل من حساب الروبوت وحساب المستخدم المشغل عضو او مشرف في القناة .__
 """
     SETTINGS_HELP="""
-**You can easily customize you player as per you needs. The following configurations are available:**
+** يمكنك بسهولة تخصيص لاعب حسب احتياجاتك. التكوينات التالية متوفرة: **
 
-🔹Command: **/settings**
+🔹 الأمر: ** /settings**
 
-🔹AVAILABLE CONFIGURATIONS:
+التكوينات المتوفرة:
 
-**Player Mode** -  __This allows you to run your player as 24/7 music player or only when there is song in queue. 
-If disabled, player will leave from the call when the playlist is empty.
-Otherwise STARTUP_STREAM will be streamed when playlist id empty.__
+** وضع المشغل ** - __هذا يسمح لك بتشغيل المشغل كمشغل موسيقى على مدار الساعة طوال أيام الأسبوع أو فقط عندما تكون هناك أغنية في قائمة الانتظار.
+إذا تم تعطيله ، فسيغادر اللاعب من المكالمة عندما تكون قائمة التشغيل فارغة.
+وإلا فسيتم بث STARTUP_STREAM عندما يكون معرف قائمة التشغيل فارغًا .__
 
-**Video Enabled** -  __This allows you to switch between audio and video.
-if disabled, video files will be played as audio.__
+** تمكين الفيديو ** - __هذا يسمح لك بالتبديل بين الصوت والفيديو.
+إذا تم تعطيله ، فسيتم تشغيل ملفات الفيديو كصوت .__
 
-**Admin Only** - __Enabling this will restrict non-admin users from using play command.__
+** المسؤول فقط ** - __تفعيل هذا سيقيد المستخدمين غير الإداريين من استخدام أمر التشغيل .__
 
-**Edit Title** - __Enabling this will edit your VideoChat title to current playing songs name.__
+** تحرير العنوان ** - __تفعيل هذا الخيار سيعدل عنوان دردشة الفيديو الخاص بك إلى اسم الأغاني الجاري تشغيلها .__
 
-**Shuffle Mode** - __Enabling this will shuffle the playlist whenever you import a playlist or using /yplay __
+** وضع Shuffle Mode ** - __تفعيل هذا سيؤدي إلى تبديل قائمة التشغيل عشوائيًا كلما قمت باستيراد قائمة تشغيل أو باستخدام / yplay __
 
-**Auto Reply** - __Choose whether to reply the PM messages of playing user account.
-You can  set up a custom reply message using `REPLY_MESSAGE` confug.__
-
+** الرد التلقائي ** - __اختر ما إذا كنت تريد الرد على رسائل الخاصة بحساب المستخدم المشغل.
+يمكنك إعداد رسالة رد مخصصة باستخدام متغير"REPLY_MESSAGE" .__
 """
-    SCHEDULER_HELP="""
-__VCPlayer allows you to schedule a stream. 
-This means you can schedule a stream for a future date and on the scheduled date, stream will be played automatically.
-At present you can schedule a stream for even one year!!. Make sure you have set up a databse, else you will loose your schedules whenever the player restarts. __
-
-Command: **/schedule**
-
-__Reply to a file or a youtube video or even a text message with schedule command.
-The replied media or youtube video will be scheduled and will be played on the scheduled date.
-The scheduling time is by default in IST and you can change the timezone using `TIME_ZONE` config.__
-
-Command: **/slist**
-__View your current scheduled streams.__
-
-Command: **/cancel**
-__Cancel a schedule by its schedule id, You can get the schedule id using /slist command__
-
-Command: **/cancelall**
-__Cancel all the scheduled streams__
+    SCHEDULER_HELP="""قريبا بإذن الله Qradio سيُمكنك من جدولة بث في اي مدة على مدار العام!!
 """
     RECORDER_HELP="""
-__With VCPlayer you can easily record all your video chats.
-By default telegram allows you to record for a maximum duration of 4 hours. 
-An attempt to overcome this limit has been made by automatically restarting the recording after  4 hours__
+    __ مع QRadio يمكنك بسهولة تسجيل جميع محادثات الفيديو الخاصة بك.
+افتراضيًا ، تتيح لك Telegram التسجيل لمدة أقصاها 4 ساعات.
+،وفي محاولة للتغلب على هذا وتخطي الحدود (: أعددت إلى أن يتم إعادة بدء التسجيل تلقائيًا بعد 4 ساعات__
 
-Command: **/record**
+الأمر: ** /record**
 
-AVAILABLE CONFIGURATIONS:
-1. Record Video: __If enabled both the video and audio of the stream will be recorded, otherwise only audio will be recorded.__
+التكوينات المتوفرة:
+1. Record Video: __في حالة التمكين ، سيتم تسجيل كل من الفيديو والصوت في البث الجميل، وإلا فسيتم تسجيل الصوت فقط .__
 
-2. Video dimension: __Choose between portrait and landscape dimensions for your recording__
+2. Video dimension: __أو بُعد الفيديو ومنه يكون الاختيار بين الأبعاد الرأسية والأفقية للتسجيل__
 
-3. Custom Recording Title: __Set up a custom recording title for your recordings. Use a command /rtitle to configure this.
-To turn off the custom title, use `/rtitle False `__
+3. Custom Recording Title: __ قم بإعداد عنوان تسجيل مخصص لتسجيلاتك. استخدم الأمر / rtitle لتكوين هذا.
+لإيقاف العنوان المخصص ، استخدم `/rtitle False` __
 
-4. Recording Dumb: __You can set up forwarding all your recordings to a channel, this will be useful since otherwise recordings are sent to saved messages of streaming account.
-Setup using `RECORDING_DUMP` config.__
+4. Recording Dumb: __به يمكنك إعداد إعادة توجيه جميع التسجيلات الخاصة بك إلى قناة ، وسيكون هذا مفيدًا لأنه بخلاف ذلك يتم إرسال التسجيلات إلى الرسائل المحفوظة في حساب البث او المشغل.
+الإعداد باستخدام "RECORDING_DUMP` config .__
 
-⚠️ If you start a recording with vcplayer, make sure you stop the same with vcplayer.
-
+⚠️ إذا بدأت التسجيل باستخدام QRadio ، فتأكد من إيقافه من QRadio وليس من الححساب المشغل او ادارة البث.
 """
 
-    CONTROL_HELP="""
-__VCPlayer allows you to control your streams easily__
-1. Skip a song.
-Command: **/skip**
-__You can pass a number greater than 2 to skip the song in that position.__
+    CONTROL_HELP="""__QRadio يسمح لك بالتحكم في مجالس القرآن او أيًا يكن بسهولة__
+1. لتخطي أغنية.
+الأمر: ** /skip **
+__يمكنك تمرير رقم أكبر من 2 لتخطي الأغنية صاحبة هذا الموضع أو الترتيب في قائمة التشغيل .__
 
-2. Pause the player.
-Command: **/pause**
+2. لإيقاف المشغل مؤقتًا.
+الأمر: ** / pause **
 
-3. Resume the player.
-Command: **/resume**
+3. لاستئناف المشغل.
+الأمر: ** /resume **
 
-4. Change Volume.
-Command: **/volume**
-__Pass the volume in between 1-200.__
+4. لتغيير مستوى الصوت.
+الأمر: ** /volume **
+__مرر الصوت بين 1-200 .__
 
-5. Leave the VC.
-Command: **/leave**
+5. لمغادرة المجلس.
+الأمر: ** /leave **
 
-6. Shuffle the playlist.
-Command: **/shuffle**
+6. للتبديل في قائمة التشغيل عشوائيًا.
+الأمر: ** /shuffle **
 
-7. Clear the current playlist queue.
-Command: **/clearplaylist**
+7. لمسح قائمة التشغيل الحالية.
+الأمر: ** /clearplaylist **
 
-8. Seek the video.
-Command: **/seek**
-__You can pass number of seconds to be skipped. Example: /seek 10 to skip 10 sec. /seek -10 to rewind 10 sec.__
+8. للتخطي من الفيديو.
+الأمر: ** /seek **
+__ يمكنك تمرير عدد من الثواني ليتم تخطيها. مثال: / ابحث عن 10 لتخطي 10 ثوانٍ. / طلب -10 للإرجاع 10 ثوانٍ .__
 
-9. Mute the player.
-Command: **/vcmute**
+9. لكتم صوت المشغل.
+الأمر: ** /vcmute **
 
-10. Unmute the player.
-Command : **/vcunmute**
+10. لإعادة صوت المشغل.
+الأمر: ** /vcunmute **
 
-11. Shows the playlist.
-Command: **/playlist** 
-__Use /player to show with control buttons__
-"""
+11. لتظهر قائمة التشغيل.
+الأمر: ** /playlist **
+__استخدم /player لإظهار أزرار التحكم__
+""
 
-    ADMIN_HELP="""
-__VCPlayer allows to control admins, that is you can add admins and remove them easily.
-It is recommended to use a MongoDb database for better experience, else all you admins will get reset after restart.__
+    ADMIN_HELP = ""
+__QRadio يسمح بالتحكم في المسؤولين ، أي يمكنك إضافة مدراء وإزالتهم بسهولة.
+يوصى باستخدام قاعدة بيانات MongoDb للحصول على تجربة أفضل ، وإلا فسيتم إعادة تعيين جميع المسؤولين بعد إعادة التشغيل .__
 
-Command: **/vcpromote**
-__You can promote a admin with their username or user id or by replying to that users message.__
+الأمر: ** /vcpromote **
+__يمكنك ترقية أي مسؤول باسم المستخدم أو معرف المستخدم الخاص به أو بالرد على رسالة المستخدمين .__
 
-Command: **/vcdemote**
-__Remove an admin from admin list__
+الأمر: ** /vcdemote **
+__إزالة مسؤول من قائمة المسؤولين__
 
-Command: **/refresh**
-__Refresh the admin list of chat__
-"""
+الأمر: ** /Refresh **
+__تحديث قائمة إدارة الدردشة__
+""
 
-    MISC_HELP="""
-Command: **/export**
-__VCPlayer allows you to export your current playlist for future use.__
-__A json file will be sent to you and the same can be used along /import command.__
+    MISC_HELP = "" "
+الأمر: ** /export **
+__QRadio يسمح لك بتصدير قائمة التشغيل الحالية لاستخدامها في المستقبل .__
+__ سيتم إرسال ملف json إليك ويمكن استخدام نفس الأمر مع أمر الاستيراد / .__
 
-Command : **/logs**
-__If your player went something gone wrong, you can easily check the logs using /logs__
+الأمر: ** /logs **
+__للمطورين، إذا حدث خطأ ما في المشغل ، يمكنك بسهولة التحقق من السجلات باستخدام / logs__
  
-Command : **/env**
-__Setup your config vars with /env command.__
-__Example: To set up a__ `REPLY_MESSAGE` __use__ `/env REPLY_MESSAGE=Hey, Check out @subin_works rather than spamming in my PM`__
-__You can delete a config var by ommiting a value for that, Example:__ `/env LOG_GROUP=` __this will delete the existing LOG_GROUP config.
+الأمر: ** /env **
+__إعداد متغيرات التكوين الخاصة بك باستخدام الأمر env .__
+__مثال: لإعداد__ `REPLY_MESSAGE` __use__` / env REPLY_MESSAGE = مرحبًا ، تحقق منsubin_works بدلاً من إرسال رسائل غير مرغوب فيها في PM`__
+__يمكنك حذف config var عن طريق إدخال قيمة لذلك ، على سبيل المثال: __ `/ env LOG_GROUP =` __ هذا سيحذف تهيئة LOG_GROUP الحالية.
 
-Command: **/config**
-__Same as using /env**
+الأمر: ** /config **
+__تشابه مع استخدام / env **
 
-Command: **/update**
-__Updates youe bot with latest changes__
+الأمر: ** /update **
+__تحديث برنامج الروبوت بأحدث التغييرات__
 
-Tip: __You can easily change the CHAT config by adding the user account and bot account to any other group and any command in new group__
-
+نصيحة: __يمكنك بسهولة تغيير تهيئة الدردشة عن طريق إضافة حساب المستخدم وحساب الروبوت إلى أي مجموعة أخرى وأي أمر في مجموعة جديدة دون الحاجة للتلاعب في المتغيرات__
 """
     ENV_HELP="""
-**These are the configurable vars available and you can set each one of them using /env command**
+** هذا القسم للمطورين...**
+هذه هي المتغيرات القابلة للتكوين المتاحة ويمكنك تعيين كل واحد منهم باستخدام الأمر env 
 
 
-**Mandatory Vars**
+** متغيرات إلزامية **
 
 1. `API_ID` : __Get From [my.telegram.org](https://my.telegram.org/)__
 
@@ -393,7 +371,7 @@ The PlayList link should in form `https://t.me/DumpPlaylist/xxx`
 You can also use the files from a channel as startup stream. For that just use the channel id or channel username of channel as STARTUP_STREAM value.
 For more info on channel play , read help from player section.__
 
-**Recommended Optional Vars**
+**اختيارية**
 
 1. `DATABASE_URI`: __MongoDB database Url, get from [mongodb](https://cloud.mongodb.com). This is an optional var, but it is recomonded to use this to experiance the full features.__
 

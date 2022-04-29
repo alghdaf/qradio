@@ -53,7 +53,7 @@ IST = pytz.timezone(Config.TIME_ZONE)
 if Config.DATABASE_URI:
     from utils import db
 
-HOME_TEXT = "<b>Hey  [{}](tg://user?id={}) 🙋‍♂️\n\nIam A Bot Built To Play or Stream Videos In Telegram VoiceChats.\nI Can Stream Any YouTube Video Or A Telegram File Or Even A YouTube Live.</b>"
+HOME_TEXT = "<b>مرحبًا  [{}](tg://user?id={}) \n\n أنا بوت تيليجرام للبث أخص أحدهم فما شأنك هنا؟ إذا احتجت شيئًا تواصل مع @OURPYBOT </b>"
 admin_filter=filters.create(is_admin) 
 
 @Client.on_message(filters.command(['start', f"start@{Config.BOT_USERNAME}"]))
@@ -129,8 +129,8 @@ async def start(client, message):
         return
     buttons = [
         [
-            InlineKeyboardButton('قناة العمل والتحديثات', url='https://t.me/flrbi'),
-            InlineKeyboardButton('🧩 المطور', url='https://github.com/alghdaf')
+            InlineKeyboardButton('أعمل هنا', url='https://t.me/flrbi'),
+            InlineKeyboardButton('🧩 المطور', url='https://instagram.com/alghdaf')
         ],
         [
             InlineKeyboardButton('👨🏼‍🦯 الدليل', callback_data='help_main'),
@@ -188,8 +188,8 @@ async def show_help(client, message):
 async def repo_(client, message):
     buttons = [
         [
-            InlineKeyboardButton('🧩 المطور ', url='https://github.com/alghdaf'),
-            InlineKeyboardButton('⚙️ قناة العمل والتحديثات', url='https://t.me/flrbi'),     
+            InlineKeyboardButton('🧩 المطور ', url='https://instagram.com/alghdaf'),
+            InlineKeyboardButton('هنا حيث أعمل', url='https://t.me/flrbi'),     
         ],
         [
             InlineKeyboardButton("🎞 همم ", url='https://t.me/alghdaf'),
@@ -202,7 +202,7 @@ async def repo_(client, message):
 @Client.on_message(filters.command(['restart', 'update', f"restart@{Config.BOT_USERNAME}", f"update@{Config.BOT_USERNAME}"]) & admin_filter & chat_filter)
 async def update_handler(client, message):
     if Config.HEROKU_APP:
-        k = await message.reply("Heroku ووجد تطبيق, يتم إعادة التشغيل للتحديث.")
+        k = await message.reply("وجد مصدر التطبيق، يتم إعادة التشغيل للتحديث.")
         if Config.DATABASE_URI:
             msg = {"msg_id":k.message_id, "chat_id":k.chat.id}
             if not await db.is_saved("RESTART"):
@@ -211,7 +211,7 @@ async def update_handler(client, message):
                 await db.edit_config("RESTART", msg)
             await sync_to_db()
     else:
-        k = await message.reply("لم يتم العثور على تطبيق هيروكو, نحاول اعادة التشغيل.")
+        k = await message.reply("لم يتم العثور على تطبيق هيروكو، نحاول اعادة التشغيل.")
         if Config.DATABASE_URI:
             msg = {"msg_id":k.message_id, "chat_id":k.chat.id}
             if not await db.is_saved("RESTART"):
@@ -254,31 +254,31 @@ async def set_heroku_var(client, message):
                         "EDIT_TITLE", "RECORDING_DUMP", "RECORDING_TITLE", "IS_VIDEO", "IS_LOOP", "DELAY", "PORTRAIT", 
                         "IS_VIDEO_RECORD", "PTN", "CUSTOM_QUALITY"]
                 if env_ in ENV_VARS:
-                    await m.edit(f"Current Value for `{env}`  is `{getattr(Config, env_)}`")
+                    await m.edit(f"القيمة الحالية للمتغير `{env}` هي `{getattr(Config, env_)}`")
                     await delete_messages([message])
                     return
                 else:
-                    await m.edit("This is an invalid env value. Read help on env to know about available env vars.")
+                    await m.edit("هذه قيمة غير صالحة، عذرًا.")
                     await delete_messages([message, m])
                     return     
             
         else:
-            await m.edit("You haven't provided any value for env, you should follow the correct format.\nExample: <code>/env CHAT=-1020202020202</code> to change or set CHAT var.\n<code>/env REPLY_MESSAGE= <code>To delete REPLY_MESSAGE.")
+            await m.edit("لم تقدم أي قيمة لـ env ، يجب عليك اتباع التنسيق الصحيح.")
             await delete_messages([message, m])
             return
 
         if Config.DATABASE_URI and var in ["STARTUP_STREAM", "CHAT", "LOG_GROUP", "REPLY_MESSAGE", "DELAY", "RECORDING_DUMP", "QUALITY"]:      
-            await m.edit("Mongo DB Found, Setting up config vars...")
+            await m.edit("تم العثور على Mongodb ، إعداد متغيرات التكوين ...")
             await asyncio.sleep(2)  
             if not value:
-                await m.edit(f"No value for env specified. Trying to delete env {var}.")
+                await m.edit(f"لم يتم تحديد قيمة لـ env. في محاولة لحذف القيمة الحالية {var}.")
                 await asyncio.sleep(2)
                 if var in ["STARTUP_STREAM", "CHAT", "DELAY"]:
-                    await m.edit("This is a mandatory var and cannot be deleted.")
+                    await m.edit("هذا متغير إلزامي ولا يمكن حذفه.")
                     await delete_messages([message, m]) 
                     return
                 await edit_config(var, False)
-                await m.edit(f"Sucessfully deleted {var}")
+                await m.edit(f"حُذف بنجاح {var}")
                 await delete_messages([message, m])           
                 return
             else:
@@ -288,7 +288,7 @@ async def set_heroku_var(client, message):
                     except:
                         if var == "QUALITY":
                             if not value.lower() in ["low", "medium", "high"]:
-                                await m.edit("You should specify a value between 10 - 100.")
+                                await m.edit("يجب تحديد قيمة بين 10-100.")
                                 await delete_messages([message, m])
                                 return
                             else:
@@ -300,7 +300,7 @@ async def set_heroku_var(client, message):
                                 elif value == "low":
                                     value = 50
                         else:
-                            await m.edit("You should give me a chat id . It should be an interger.")
+                            await m.edit("يجب أن تعطيني ID إذا. يجب أن يكون عددًا صحيحًا.")
                             await delete_messages([message, m])
                             return
                     if var == "CHAT":
@@ -322,14 +322,14 @@ async def set_heroku_var(client, message):
                             k, reply = await seek_file(0)
                             if k == False:
                                 await restart_playout()
-                    await m.edit(f"Succesfully changed {var} to {value}")
+                    await m.edit(f"غُير بنجاح {var} إلى {value}")
                     await delete_messages([message, m])
                     return
                 else:
                     if var == "STARTUP_STREAM":
                         Config.STREAM_SETUP=False
                     await edit_config(var, value)
-                    await m.edit(f"Succesfully changed {var} to {value}")
+                    await m.edit(f"غُير بنجاح {var} إلى {value}")
                     await delete_messages([message, m])
                     await restart_playout()
                     return
@@ -343,16 +343,16 @@ async def set_heroku_var(client, message):
                 return     
             config = Config.HEROKU_APP.config()
             if not value:
-                await m.edit(f"No value for env specified. Trying to delete env {var}.")
+                await m.edit(f"بما أنه لم تُعطى لي قيمة، في محاولة لحذف القيمة الحالية للمتغير {var}.")
                 await asyncio.sleep(2)
                 if var in ["STARTUP_STREAM", "CHAT", "DELAY", "API_ID", "API_HASH", "BOT_TOKEN", "SESSION_STRING", "ADMINS"]:
-                    await m.edit("These are mandatory vars and cannot be deleted.")
+                    await m.edit("هذه متغيرات إلزامية ولا يمكن حذفها.")
                     await delete_messages([message, m])
                     return
                 if var in config:
-                    await m.edit(f"Sucessfully deleted {var}")
+                    await m.edit(f"حُذف بنجاح {var}")
                     await asyncio.sleep(2)
-                    await m.edit("Now restarting the app to make changes.")
+                    await m.edit("يتم الآن إعادة تشغيل التطبيق لإجراء تغييرات.")
                     if Config.DATABASE_URI:
                         msg = {"msg_id":m.message_id, "chat_id":m.chat.id}
                         if not await db.is_saved("RESTART"):
@@ -362,15 +362,15 @@ async def set_heroku_var(client, message):
                     del config[var]                
                     config[var] = None               
                 else:
-                    k = await m.edit(f"No env named {var} found. Nothing was changed.")
+                    k = await m.edit(f"لم يتم العثةر على متغير بإسم {var}. لا شيء للتغيير...")
                     await delete_messages([message, k])
                 return
             if var in config:
-                await m.edit(f"Variable already found. Now edited to {value}")
+                await m.edit(f"متغير موجود بالفعل. تم تحريره الآن إلى {value}")
             else:
-                await m.edit(f"Variable not found, Now setting as new var.")
+                await m.edit(f"لم يتم العثور على المتغير ، يتم الآن تعيين متغير جديد.")
             await asyncio.sleep(2)
-            await m.edit(f"Succesfully set {var} with value {value}, Now Restarting to take effect of changes...")
+            await m.edit(f" تم بنجاح تعيين {var} بالقيمة {value}, تتم الآن إعادة التشغيل لترى تأثيرات التغيير...")
             if Config.DATABASE_URI:
                 msg = {"msg_id":m.message_id, "chat_id":m.chat.id}
                 if not await db.is_saved("RESTART"):

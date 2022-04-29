@@ -16,7 +16,7 @@
 from pyrogram import Client
 from config import Config
 bot = Client(
-    "VCPlayer",
+    "QRadio",
     Config.API_ID,
     Config.API_HASH,
     bot_token=Config.BOT_TOKEN,

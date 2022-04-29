@@ -87,7 +87,7 @@ async def remove_admin(client, message):
                 user=await client.get_users(user)
             except Exception as e:
                 k = await message.reply(f"لم أتمكن من تحديد موقع هذا المستخدم.\nError: {e}")
-                LOGGER.error(f"Unable to Locate user, {e}", exc_info=True)
+                LOGGER.error(f"تعذر العثور على المستخدم, {e}", exc_info=True)
                 await delete_messages([message, k])
                 return
             user_id=user.id

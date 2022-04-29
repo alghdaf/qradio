@@ -101,7 +101,7 @@ async def skip_track(_, m: Message):
                     await msg.edit(f"لا يمكنك تخطي أول أغنيتين- {i}")
                     await delete_messages([m, msg])
         except (ValueError, TypeError):
-            await msg.edit("Invalid input")
+            await msg.edit("ادخال غير صالح.")
             await delete_messages([m, msg])
     pl=await get_playlist_str()
     if m.chat.type == "private":
@@ -123,10 +123,10 @@ async def pause_playing(_, m: Message):
         await delete_messages([m])
         return
     if Config.PAUSE:
-        k = await m.reply("Already Paused")
+        k = await m.reply("معطل بالفعل")
         await delete_messages([m, k])
         return
-    k = await m.reply("Paused Video Call")
+    k = await m.reply("عُطل المذيع")
     await pause()
     await delete_messages([m, k])
     
@@ -142,10 +142,10 @@ async def resume_playing(_, m: Message):
         await delete_messages([m])
         return
     if not Config.PAUSE:
-        k = await m.reply("Nothing paused to resume")
+        k = await m.reply("لا شيء توقف للاستئناف.")
         await delete_messages([m, k])
         return
-    k = await m.reply("Resumed Video Call")
+    k = await m.reply("استئناف العمل في المجلس")
     await resume()
     await delete_messages([m, k])
     
@@ -162,14 +162,14 @@ async def set_vol(_, m: Message):
         await delete_messages([m])
         return
     if len(m.command) < 2:
-        await m.reply_text('Change Volume of Your VCPlayer. ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ', reply_markup=await volume_buttons())
+        await m.reply_text('إعادة تعيين مستوى صوت QRadio. ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ', reply_markup=await volume_buttons())
         await delete_messages([m])
         return
     if not 1 < int(m.command[1]) < 200:
-        await m.reply_text(f"Only 1-200 range is accepeted. ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ", reply_markup=await volume_buttons())
+        await m.reply_text(f"حدودك فقط 1-200. ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ", reply_markup=await volume_buttons())
     else:
         await volume(int(m.command[1]))
-        await m.reply_text(f"Succesfully set volume to {m.command[1]} ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ", reply_markup=await volume_buttons())
+        await m.reply_text(f"تم اعادة تعيين الصوت الى {m.command[1]} ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ", reply_markup=await volume_buttons())
     await delete_messages([m])
 
     
@@ -186,15 +186,15 @@ async def set_mute(_, m: Message):
         await delete_messages([m])
         return
     if Config.MUTED:
-        k = await m.reply_text("Already muted.")
+        k = await m.reply_text("مكتوم بالفعل..")
         await delete_messages([m, k])
         return
     k=await mute()
     if k:
-        k = await m.reply_text(f" 🔇 Succesfully Muted ")
+        k = await m.reply_text(f" 🔇 كُتم بنجاح ")
         await delete_messages([m, k])
     else:
-        k = await m.reply_text("Already muted.")
+        k = await m.reply_text("مكتوم بالفعل.")
         await delete_messages([m, k])
     
 @Client.on_message(filters.command(['vcunmute', f"vcunmute@{Config.BOT_USERNAME}"]) & admin_filter & chat_filter)
@@ -208,22 +208,22 @@ async def set_unmute(_, m: Message):
         await delete_messages([m])
         return
     if not Config.MUTED:
-        k = await m.reply("Stream already unmuted.")
+        k = await m.reply("البث غير مكتوم بالفعل")
         await delete_messages([m, k])
         return
     k=await unmute()
     if k:
-        k = await m.reply_text(f"🔊 Succesfully Unmuted ")
+        k = await m.reply_text(f"🔊 أُلغي الكتم بنجاح ")
         await delete_messages([m, k])
         return
     else:
-        k=await m.reply_text("Not muted, already unmuted.")    
+        k=await m.reply_text("لم يُلغى الكتم، هو غير مكتوم بالفعل")    
         await delete_messages([m, k])
 
 
 @Client.on_message(filters.command(["replay", f"replay@{Config.BOT_USERNAME}"]) & admin_filter & chat_filter)
 async def replay_playout(client, m: Message):
-    msg = await m.reply('Checking player')
+    msg = await m.reply('التحقق من المشغل')
     if not Config.CALL_STATUS:
         await msg.edit(
             "المشغل في وضع الخمول ، ابدأ تشغيل المشغل باستخدام الزر أدناه. ㅤㅤㅤㅤㅤ",
@@ -232,7 +232,7 @@ async def replay_playout(client, m: Message):
         )
         await delete_messages([m])
         return
-    await msg.edit(f"Replaying from begining")
+    await msg.edit(f"إعادة التشغيل من البداية")
     await restart_playout()
     await delete_messages([m, msg])
 
@@ -326,5 +326,5 @@ async def seek_playout(client, m: Message):
 
 @Client.on_message(filters.command(["settings", f"settings@{Config.BOT_USERNAME}"]) & admin_filter & chat_filter)
 async def settings(client, m: Message):
-    await m.reply(f"قم بتكوين إعدادات VCPlayer هنا.", reply_markup=await settings_panel(), disable_web_page_preview=True)
+    await m.reply(f"قم بتكوين إعدادات QRadio من هنا.", reply_markup=await settings_panel(), disable_web_page_preview=True)
     await delete_messages([m])

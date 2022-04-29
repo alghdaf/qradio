@@ -44,13 +44,13 @@ admin_filter=filters.create(is_admin)
 @Client.on_message(filters.command(["export", f"export@{Config.BOT_USERNAME}"]) & admin_filter & chat_filter)
 async def export_play_list(client, message: Message):
     if not Config.playlist:
-        k=await message.reply_text("Playlist is Empty")
+        k=await message.reply_text("قائمة التشغيل فارغة.")
         await delete_messages([message, k])
         return
     file=f"{message.chat.id}_{message.message_id}.json"
     with open(file, 'w+') as outfile:
         json.dump(Config.playlist, outfile, indent=4)
-    await client.send_document(chat_id=message.chat.id, document=file, file_name="PlayList.json", caption=f"Playlist\n\nNumber Of Songs: <code>{len(Config.playlist)}</code>\n\nJoin [XTZ Bots](https://t.me/subin_works)")
+    await client.send_document(chat_id=message.chat.id, document=file, file_name="PlayList.json", caption=f"Playlist\n\nعدد الأغاني: <code>{len(Config.playlist)}</code>")
     try:
         os.remove(file)
     except:

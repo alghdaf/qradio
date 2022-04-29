@@ -71,7 +71,7 @@ async def add_to_playlist(_, message: Message):
         admins = await get_admins(Config.CHAT)
         if Config.ADMIN_ONLY:
             if not (message.from_user is None and message.sender_chat or message.from_user.id in admins):
-                k=await message.reply_sticker("CAADBQADsQIAAtILIVYld1n74e3JuQI")
+                k=await message.reply_sticker("AgADhgoAAgaQUFM")
                 await delete_messages([message, k])
                 return
         type=""
@@ -83,13 +83,13 @@ async def add_to_playlist(_, message: Message):
                 k=await message.reply("هذا الأمر للمسئولين فقط.")
                 await delete_messages([message, k])
                 return
-        msg = await message.reply_text("⚡️ **Checking recived input..**")
+        msg = await message.reply_text("⚡️ ** التحقق من المدخلات المتلقاة ...**")
         if message.reply_to_message and message.reply_to_message.video:
-            await msg.edit("⚡️ **Checking Telegram Media...**")
+            await msg.edit("⚡️ **التحقق من وسائط Telegram ...**")
             type='video'
             m_video = message.reply_to_message.video       
         elif message.reply_to_message and message.reply_to_message.document:
-            await msg.edit("⚡️ **Checking Telegram Media...**")
+            await msg.edit("⚡️ **التحقق من وسائط Telegram ...**")
             m_video = message.reply_to_message.document
             type='video'
             if not "video" in m_video.mime_type:
@@ -97,7 +97,7 @@ async def add_to_playlist(_, message: Message):
         elif message.reply_to_message and message.reply_to_message.audio:
             #if not Config.IS_VIDEO:
                 #return await message.reply("Play from audio file is available only if Video Mode if turned off.\nUse /settings to configure ypur player.")
-            await msg.edit("⚡️ **Checking Telegram Media...**")
+            await msg.edit("⚡️ **التحقق من وسائط Telegram ...**")
             type='audio'
             m_video = message.reply_to_message.audio       
         else:
@@ -183,14 +183,14 @@ async def add_to_playlist(_, message: Message):
             else:
                 Config.playlist.append(data)
             await add_to_db_playlist(data)        
-            await msg.edit("Media added to playlist")
+            await msg.edit("تمت إضافة الوسائط إلى قائمة التشغيل")
         elif type in ["youtube", "query", "ytdl_s"]:
             if type=="youtube":
-                await msg.edit("⚡️ **Fetching Video From YouTube...**")
+                await msg.edit("⚡️ **إحضار الفيديو من YouTube ...**")
                 url=yturl
             elif type=="query":
                 try:
-                    await msg.edit("⚡️ **Fetching Video From YouTube...**")
+                    await msg.edit("⚡️ **إحضار الفيديو من YouTube ...**")
                     ytquery=ysearch
                     results = YoutubeSearch(ytquery, max_results=1).to_dict()
                     url = f"https://youtube.com{results[0]['url_suffix']}"
@@ -482,7 +482,7 @@ allcmd = ["play", "player", f"play@{Config.BOT_USERNAME}", f"player@{Config.BOT_
 
 @Client.on_message(filters.command(admincmds) & ~admin_filter & chat_filter)
 async def notforu(_, m: Message):
-    k = await _.send_cached_media(chat_id=m.chat.id, file_id="CAADBQADEgQAAtMJyFVJOe6-VqYVzAI", caption="You Are Not Authorized", reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton('⚡️Join Here', url='https://t.me/subin_works')]]))
+    k = await _.send_cached_media(chat_id=m.chat.id, file_id="CAACAgQAAxkBAAIDbWJqLQ6ZMG_HoAAB_q54OYfP5dHdNwACEgwAAk22UVMqRYVe61NM7yQE", caption="أنت بالذات غير مصرح لك", reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton('الله يهديك', url='https://t.me/flrbi')]]))
     await delete_messages([m, k])
 
 @Client.on_message(filters.command(allcmd) & ~chat_filter & filters.group)
@@ -501,9 +501,9 @@ async def not_chat(_, m: Message):
     else:
         buttons = [
             [
-                InlineKeyboardButton('⚡️ هنا حيث أعمل', url='https://t.me/flrbi'),
-                InlineKeyboardButton('🎃 رفيق', url='https://t.me/inabbot'),
+                InlineKeyboardButton('⚡️ محلُّ غملّي', url='https://t.me/flrbi'),
+                InlineKeyboardButton('): رفيق درب', url='https://t.me/inabbot'),
             ]
             ]
-        await m.reply("<b>لا يمكنك استخدام هذا الروبوت في هذه المجموعة فهو لا يخصك, كلم @aghdaf لإنشاءروبوت خاص بك بمقابل</b>", disable_web_page_preview=True, reply_markup=InlineKeyboardMarkup(buttons))
+        await m.reply("<b>لا يمكنك استخدام هذا الروبوت في هذه المجموعة فهو لا يخصك, كلم @ourpybot لإنشاءروبوت خاص بك بمقابل</b>", disable_web_page_preview=True, reply_markup=InlineKeyboardMarkup(buttons))
 
