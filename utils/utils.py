@@ -1793,9 +1793,9 @@ def convert(seconds):
 
 def get_pause(status):
     if status == True:
-        return "Resume"
+        return "تشغيل"
     else:
-        return "Pause"
+        return "إيقاف"
 
 #https://github.com/pytgcalls/pytgcalls/blob/dev/pytgcalls/types/input_stream/video_tools.py#L27-L38
 def resize_ratio(w, h, factor):
@@ -1819,17 +1819,17 @@ def stop_and_restart():
     os.execl(sys.executable, sys.executable, *sys.argv)
 
 
-def get_image(title, pic, dur="Live"):
+def get_image(title, pic, dur="Liv"):
     newimage = "converted.jpg"
     image = Image.open(pic) 
     draw = ImageDraw.Draw(image) 
     font = ImageFont.truetype('./utils/font.ttf', 60)
     title = title[0:45]
-    MAX_W = 1790
+    MAX_W = 82
     dur=convert(int(float(dur)))
     if dur=="0:00:00":
-        dur = "Live Stream"
-    para=[f'Playing: {title}', f'Duration: {dur}']
+        dur = "بث مباشر"
+    para=[f'يُبث: {title}', f'مدة: {dur}']
     current_h, pad = 450, 20
     for line in para:
         w, h = draw.textsize(line, font=font)
