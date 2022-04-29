@@ -870,14 +870,14 @@ async def chek_the_media(link, seek=False, pic=False, title="Music"):
                 LOGGER.error("Unable to get Audio properties within time.")
             if is_audio_:
                 pic_=await bot.get_messages("ikerw", 104)
-                photoo = "./pic/photoo"
-                if not os.path.exists(photoo):
-                    photo = await pic_.download(file_name=photoo)
+                photo = "./pic/photo"
+                if not os.path.exists(photo):
+                    photo = await pic_.download(file_name=photo)
                 try:
                     dur_= await get_duration(link)
                 except:
                     dur_=0
-                pic = get_image(title, photoo, dur_) 
+                pic = get_image(title, photo, dur_) 
             else:
                 Config.STREAM_LINK=False
                 if Config.playlist or Config.STREAM_LINK:
