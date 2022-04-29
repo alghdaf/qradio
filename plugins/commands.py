@@ -202,7 +202,7 @@ async def repo_(client, message):
 @Client.on_message(filters.command(['restart', 'update', f"restart@{Config.BOT_USERNAME}", f"update@{Config.BOT_USERNAME}"]) & admin_filter & chat_filter)
 async def update_handler(client, message):
     if Config.HEROKU_APP:
-        k = await message.reply("وجد مصدر التطبيق، يتم إعادة التشغيل للتحديث.")
+        k = await message.reply("وجد مصدر المشروع، يتم إعادة التشغيل للتحديث.")
         if Config.DATABASE_URI:
             msg = {"msg_id":k.message_id, "chat_id":k.chat.id}
             if not await db.is_saved("RESTART"):

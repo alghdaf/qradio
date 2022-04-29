@@ -47,25 +47,25 @@ debug = Client(
 @debug.on_message(filters.command(['env', f"env@{Config.BOT_USERNAME}", "config", f"config@{Config.BOT_USERNAME}"]) & filters.private & filters.user(Config.ADMINS))
 async def set_heroku_var(client, message):
     if message.from_user.id not in Config.SUDO:
-        return await message.reply(f"/env command can only be used by creator of the bot, ({str(Config.SUDO)})")
+        return await message.reply(f"/env لا يمكن استخدام الأمر إلا من قبل منشئ الروبوت السيد غداف, ({str(Config.SUDO)})")
     with suppress(MessageIdInvalid, MessageNotModified):
-        m = await message.reply("Checking config vars..")
+        m = await message.reply("التحقق من تكوين المتغيرات..")
         if " " in message.text:
             cmd, env = message.text.split(" ", 1)
             if  not "=" in env:
-                await m.edit("You should specify the value for env.\nExample: /env CHAT=-100213658211")
+                await m.edit("يجب عليك تحديد القيمة .\nExample: /env CHAT=-8282828288282")
                 return
             var, value = env.split("=", 1)
         else:
-            await m.edit("You haven't provided any value for env, you should follow the correct format.\nExample: <code>/env CHAT=-1020202020202</code> to change or set CHAT var.\n<code>/env REPLY_MESSAGE= <code>To delete REPLY_MESSAGE.")
+            await m.edit("لم تقدم أي قيمة لـ ENV ، يجب عليك اتباع التنسيق الصحيح.")
             return
 
         if Config.DATABASE_URI and var in ["STARTUP_STREAM", "CHAT", "LOG_GROUP", "REPLY_MESSAGE", "DELAY", "RECORDING_DUMP"]:      
             await m.edit("Mongo DB Found, Setting up config vars...") 
             if not value:
-                await m.edit(f"No value for env specified. Trying to delete env {var}.")
+                await m.edit(f"لا قيمة للمتغير المحدد. محاولة حذف ENV {var}.")
                 if var in ["STARTUP_STREAM", "CHAT", "DELAY"]:
-                    await m.edit("This is a mandatory var and cannot be deleted.")
+                    await m.edit("هذا هو متغير إلزامي ولا يمكن حذفه.")
                     return
                 await edit_config(var, False)
                 await m.edit(f"Sucessfully deleted {var}")
@@ -76,21 +76,21 @@ async def set_heroku_var(client, message):
                     try:
                         value=int(value)
                     except:
-                        await m.edit("You should give me a chat id . It should be an interger.")
+                        await m.edit("يجب أن تعطيني دردشة إذا. يجب أن يكون عدد صحيح.")
         
                         return
                     if var == "CHAT":
                         Config.ADMIN_CACHE=False
                         Config.CHAT=int(value)
                     await edit_config(var, int(value))
-                    await m.edit(f"Succesfully changed {var} to {value}")
+                    await m.edit(f"غير بنجاح {var} الى {value}")
     
                     return
                 else:
                     if var == "STARTUP_STREAM":
                         Config.STREAM_SETUP=False
                     await edit_config(var, value)
-                    await m.edit(f"Succesfully changed {var} to {value}")
+                    await m.edit(f"غير بنجاح {var} الى {value}")
                     return
         else:
             if not Config.HEROKU_APP:
@@ -101,14 +101,14 @@ async def set_heroku_var(client, message):
                 return     
             config = Config.HEROKU_APP.config()
             if not value:
-                await m.edit(f"No value for env specified. Trying to delete env {var}.")
+                await m.edit(f"لا قيمة معطاة للمتغير،اذا ساقوم بحذف القيمة الحالية {var}.")
                 if var in ["STARTUP_STREAM", "CHAT", "DELAY", "API_ID", "API_HASH", "BOT_TOKEN", "SESSION_STRING", "ADMINS"]:
-                    await m.edit("These are mandatory vars and cannot be deleted.")
+                    await m.edit("هذا متغير إلزامي ولا يمكن حذفه!")
     
                     return
                 if var in config:
-                    await m.edit(f"Sucessfully deleted {var}")
-                    await m.edit("Now restarting the app to make changes.")
+                    await m.edit(f"حذف بنجاح {var}")
+                    await m.edit("الان يتم اعادة تشغيل المشروع لحفظ وتطبيق التعديلات.")
                     if Config.DATABASE_URI:
                         msg = {"msg_id":m.message_id, "chat_id":m.chat.id}
                         if not await db.is_saved("RESTART"):
@@ -118,13 +118,13 @@ async def set_heroku_var(client, message):
                     del config[var]                
                     config[var] = None               
                 else:
-                    k = await m.edit(f"No env named {var} found. Nothing was changed.")
+                    k = await m.edit(f"لا يوجد متغير باسم {var} . لا شيء سيتغير.")
                 return
             if var in config:
-                await m.edit(f"Variable already found. Now edited to {value}")
+                await m.edit(f"وجد المتغير. الآن سيتم تعديله إلى {value}")
             else:
-                await m.edit(f"Variable not found, Now setting as new var.")
-            await m.edit(f"Succesfully set {var} with value {value}, Now Restarting to take effect of changes...")
+                await m.edit(f"لم أجد المتغير, سيتم الان اعداده كمتغير جديد.")
+            await m.edit(f"أُعد بنجاح {var} بالقيمة {value}, الآن يتم اعادة التشغيل لحفظ وتطبيق التغييرات...")
             if Config.DATABASE_URI:
                 msg = {"msg_id":m.message_id, "chat_id":m.chat.id}
                 if not await db.is_saved("RESTART"):
@@ -152,7 +152,7 @@ async def update(bot, message):
 @debug.on_message(filters.command(["clearplaylist", f"clearplaylist@{Config.BOT_USERNAME}"]) & filters.private & filters.user(Config.ADMINS))
 async def clear_play_list(client, m: Message):
     if not Config.playlist:
-        k = await m.reply("Playlist is empty.")  
+        k = await m.reply("قائمة التشغيل فارغة.")  
         return
     Config.playlist.clear()
     k=await m.reply_text(f"Playlist Cleared.")
@@ -161,9 +161,9 @@ async def clear_play_list(client, m: Message):
     
 @debug.on_message(filters.command(["skip", f"skip@{Config.BOT_USERNAME}"]) & filters.private & filters.user(Config.ADMINS))
 async def skip_track(_, m: Message):
-    msg=await m.reply('trying to skip from queue..')
+    msg=await m.reply('في محاولة للتخطي من قائمة التشغيل...')
     if not Config.playlist:
-        await msg.edit("Playlist is Empty.")
+        await msg.edit("قائمة التشغيل فارغة.")
         return
     if len(m.command) == 1:
         old_track = Config.playlist.pop(0)
@@ -176,13 +176,13 @@ async def skip_track(_, m: Message):
             items.sort(reverse=True)
             for i in items:
                 if 2 <= i <= (len(Config.playlist) - 1):
-                    await msg.edit(f"Succesfully Removed from Playlist- {i}. **{Config.playlist[i][1]}**")
+                    await msg.edit(f"حذف بنجاح من قائمة التشغيل- {i}. **{Config.playlist[i][1]}**")
                     await clear_db_playlist(song=Config.playlist[i])
                     Config.playlist.pop(i)
                 else:
-                    await msg.edit(f"You cant skip first two songs- {i}")
+                    await msg.edit(f"لا يمكنك تخطي أول صوتيتين- {i}")
         except (ValueError, TypeError):
-            await msg.edit("Invalid input")
+            await msg.edit("معطى غير صالح")
     pl=await get_playlist_str()
     await msg.edit(pl, disable_web_page_preview=True)
 
@@ -207,19 +207,19 @@ def stop_and_restart():
 
 async def get_playlist_str():
     if not Config.playlist:
-        pl = f"🔈 Playlist is empty.)ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ"
+        pl = f"🔈 قائمة التشغيل فارغة.)ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ"
     else:
         if len(Config.playlist)>=25:
             tplaylist=Config.playlist[:25]
-            pl=f"Listing first 25 songs of total {len(Config.playlist)} songs.\n"
+            pl=f" أول 25 أغنية من مجموع {len(Config.playlist)} صوتية.\n"
             pl += f"▶️ **Playlist**: ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ\n" + "\n".join([
-                f"**{i}**. **🎸{x[1]}**\n   👤**Requested by:** {x[4]}"
+                f"**{i}**. **🎸{x[1]}**\n   👤**طُلب بواسطة:** {x[4]}"
                 for i, x in enumerate(tplaylist)
                 ])
             tplaylist.clear()
         else:
             pl = f"▶️ **Playlist**: ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ\n" + "\n".join([
-                f"**{i}**. **🎸{x[1]}**\n   👤**Requested by:** {x[4]}\n"
+                f"**{i}**. **🎸{x[1]}**\n   👤**طُلب بواسطة:** {x[4]}\n"
                 for i, x in enumerate(Config.playlist)
             ])
     return pl
