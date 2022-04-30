@@ -182,7 +182,7 @@ async def run_schedule(job_id):
             if not await start_scheduled():
                 LOGGER.error("Scheduled stream skipped, Reason - Unable to start a voice chat.")
                 return
-        data_ = [{1:data['1'], 2:data['2'], 3:data['3'], 4:data['3'], 5:data['5']}] #كانت 4 عن 6
+        data_ = [{1:data['1'], 2:data['2'], 3:data['3'], 4:data['4'], 5:data['5']}] #كانت 4 عن 6
         Config.playlist = data_ + Config.playlist
         await play()
         LOGGER.info("Starting Scheduled Stream")
@@ -1825,11 +1825,11 @@ def get_image(title, pic, dur="Liv"):
     draw = ImageDraw.Draw(image) 
     font = ImageFont.truetype('./utils/font.ttf', 60)
     title = title[0:45]
-    MAX_W = 1000
+    MAX_W = 1500
     dur=convert(int(float(dur)))
     if dur=="0:00:00":
         dur = "بث مباشر"
-    para=[f'يُبث: {title}', f'مدة: {dur}']
+    para=[f'يُبث: {title}', f'المدة: {dur}']
     current_h, pad = 450, 20
     for line in para:
         w, h = draw.textsize(line, font=font)
