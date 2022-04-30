@@ -746,7 +746,7 @@ async def start_stream():
         await set_up_startup()
     if Config.YPLAY:
         try:
-            msg_id=Config.STREAM_URL.split("/", 4)[4]
+            msg_id=Config.STREAM_URL.split("/", 2)[2]
         except:
             LOGGER.error("Unable to fetch youtube playlist.Recheck your startup stream.")
             pass
