@@ -182,7 +182,7 @@ async def run_schedule(job_id):
             if not await start_scheduled():
                 LOGGER.error("Scheduled stream skipped, Reason - Unable to start a voice chat.")
                 return
-        data_ = [{1:data['1'], 2:data['2'], 3:data['3'], 4:data['6'], 5:data['5']}] #كانت 4 عن 6
+        data_ = [{1:data['1'], 2:data['2'], 3:data['3'], 4:data['3'], 5:data['5']}] #كانت 4 عن 6
         Config.playlist = data_ + Config.playlist
         await play()
         LOGGER.info("Starting Scheduled Stream")
