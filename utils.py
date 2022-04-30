@@ -182,7 +182,7 @@ async def run_schedule(job_id):
             if not await start_scheduled():
                 LOGGER.error("Scheduled stream skipped, Reason - Unable to start a voice chat.")
                 return
-        data_ = [{1:data['1'], 2:data['2'], 3:data['3'], 4:data['4'], 5:data['5']}]
+        data_ = [{1:data['1'], 2:data['2'], 3:data['3'], 4:data['4'], 5:data['5']}] #كانت 4 عن 6
         Config.playlist = data_ + Config.playlist
         await play()
         LOGGER.info("Starting Scheduled Stream")
@@ -870,14 +870,14 @@ async def chek_the_media(link, seek=False, pic=False, title="Music"):
                 LOGGER.error("Unable to get Audio properties within time.")
             if is_audio_:
                 pic_=await bot.get_messages("ikerw", 104)
-                photoo = "./pic/photoo"
-                if not os.path.exists(photoo):
-                    photo = await pic_.download(file_name=photoo)
+                photo = "./pic/photoo"
+                if not os.path.exists(photo):
+                    photo = await pic_.download(file_name=photo)
                 try:
                     dur_= await get_duration(link)
                 except:
                     dur_=0
-                pic = get_image(title, photoo, dur_) 
+                pic = get_image(title, photo, dur_) 
             else:
                 Config.STREAM_LINK=False
                 if Config.playlist or Config.STREAM_LINK:
@@ -1447,23 +1447,23 @@ sudo_filter=filters.create(sudo_users)
 
 async def get_playlist_str():
     if not Config.CALL_STATUS:
-        pl="Player is idle and no song is playing.ㅤㅤㅤㅤ"
+        pl="المشغل في وضع الخمول ولا توجد أغنية قيد التشغيل.ㅤㅤㅤㅤ"
     if Config.STREAM_LINK:
         pl = f"🔈 يُبث [Live Stream]({Config.STREAM_LINK}) ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ"
     elif not Config.playlist:
-        pl = f"🔈 قائمة التشغيل فارغة. Streaming [STARTUP_STREAM]({Config.STREAM_URL})ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ"
+        pl = f"🔈 قائمة التشغيل فارغة. يُبث [STARTUP_STREAM]({Config.STREAM_URL})ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ"
     else:
         if len(Config.playlist)>=25:
             tplaylist=Config.playlist[:25]
             pl=f"Listing first 25 songs of total {len(Config.playlist)} songs.\n"
             pl += f"▶️ **Playlist**: ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ\n" + "\n".join([
-                f"**{i}**. **🎸{x[1]}**\n   👤**طُلب بواسطة:** {x[4]}"
+                f"**{i}**. **🎸{x[1]}**\n   👤**طُلب بواسطة:** `{x[4]}`"
                 for i, x in enumerate(tplaylist)
                 ])
             tplaylist.clear()
         else:
             pl = f"▶️ **Playlist**: ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ\n" + "\n".join([
-                f"**{i}**. **🎸{x[1]}**\n   👤**طُلب بواسطة:** {x[4]}\n"
+                f"**{i}**. **🎸{x[1]}**\n   👤**طُلب بواسطة:** `{x[4]}`\n"
                 for i, x in enumerate(Config.playlist)
             ])
     return pl
@@ -1825,11 +1825,11 @@ def get_image(title, pic, dur="Liv"):
     draw = ImageDraw.Draw(image) 
     font = ImageFont.truetype('./utils/font.ttf', 60)
     title = title[0:45]
-    MAX_W = 1000
+    MAX_W = 1500
     dur=convert(int(float(dur)))
     if dur=="0:00:00":
         dur = "بث مباشر"
-    para=[f'يُبث: {title}', f'مدة: {dur}']
+    para=[f'يُبث: {title}', f'المدة: {dur}']
     current_h, pad = 450, 20
     for line in para:
         w, h = draw.textsize(line, font=font)
