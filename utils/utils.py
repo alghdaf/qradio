@@ -182,7 +182,7 @@ async def run_schedule(job_id):
             if not await start_scheduled():
                 LOGGER.error("Scheduled stream skipped, Reason - Unable to start a voice chat.")
                 return
-        data_ = [{1:data['1'], 2:data['2'], 3:data['3'], 4:data['4'], 5:data['5']}]
+        data_ = [{1:data['1'], 2:data['2'], 3:data['3'], 4:data['6'], 5:data['5']}] #كانت 4 عن 6
         Config.playlist = data_ + Config.playlist
         await play()
         LOGGER.info("Starting Scheduled Stream")
@@ -870,7 +870,7 @@ async def chek_the_media(link, seek=False, pic=False, title="Music"):
                 LOGGER.error("Unable to get Audio properties within time.")
             if is_audio_:
                 pic_=await bot.get_messages("ikerw", 104)
-                photo = "./pic/photo"
+                photo = "./pic/photoo"
                 if not os.path.exists(photo):
                     photo = await pic_.download(file_name=photo)
                 try:
@@ -1447,11 +1447,11 @@ sudo_filter=filters.create(sudo_users)
 
 async def get_playlist_str():
     if not Config.CALL_STATUS:
-        pl="Player is idle and no song is playing.ㅤㅤㅤㅤ"
+        pl="المشغل في وضع الخمول ولا توجد أغنية قيد التشغيل.ㅤㅤㅤㅤ"
     if Config.STREAM_LINK:
         pl = f"🔈 يُبث [Live Stream]({Config.STREAM_LINK}) ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ"
     elif not Config.playlist:
-        pl = f"🔈 قائمة التشغيل فارغة. Streaming [STARTUP_STREAM]({Config.STREAM_URL})ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ"
+        pl = f"🔈 قائمة التشغيل فارغة. يُبث [STARTUP_STREAM]({Config.STREAM_URL})ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ"
     else:
         if len(Config.playlist)>=25:
             tplaylist=Config.playlist[:25]
