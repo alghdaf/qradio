@@ -182,7 +182,7 @@ async def run_schedule(job_id):
             if not await start_scheduled():
                 LOGGER.error("Scheduled stream skipped, Reason - Unable to start a voice chat.")
                 return
-        data_ = [{1:data['1'], 2:data['2'], 3:data['3'], 4:data['4'], 5:data['5']}] #كانت 4 عن 6
+        data_ = [{1:data['1'], 2:data['2'], 3:data['3'], 4:data['6'], 5:data['5']}] #كانت 4 عن 6
         Config.playlist = data_ + Config.playlist
         await play()
         LOGGER.info("Starting Scheduled Stream")
@@ -1457,13 +1457,13 @@ async def get_playlist_str():
             tplaylist=Config.playlist[:25]
             pl=f"Listing first 25 songs of total {len(Config.playlist)} songs.\n"
             pl += f"▶️ **Playlist**: ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ\n" + "\n".join([
-                f"**{i}**. **📻)-{x[1]}**\n   "
+                f"**{i}**. **🎸{x[1]}**\n   👤**طُلب بواسطة:** {x[4]}"
                 for i, x in enumerate(tplaylist)
                 ])
             tplaylist.clear()
         else:
             pl = f"▶️ **Playlist**: ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ\n" + "\n".join([
-                f"**{i}**. **📻)-{x[1]}**\n\n   "
+                f"**{i}**. **🎸{x[1]}**\n   👤**طُلب بواسطة:** {x[4]}\n"
                 for i, x in enumerate(Config.playlist)
             ])
     return pl
@@ -1825,11 +1825,11 @@ def get_image(title, pic, dur="Liv"):
     draw = ImageDraw.Draw(image) 
     font = ImageFont.truetype('./utils/font.ttf', 60)
     title = title[0:45]
-    MAX_W = 1500
+    MAX_W = 1000
     dur=convert(int(float(dur)))
     if dur=="0:00:00":
         dur = "بث مباشر"
-    para=[f'يُبث: {title}', f'المدة: {dur}']
+    para=[f'يُبث: {title}', f'مدة: {dur}']
     current_h, pad = 450, 20
     for line in para:
         w, h = draw.textsize(line, font=font)

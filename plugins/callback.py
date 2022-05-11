@@ -378,7 +378,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             if not Config.playlist:
                 await query.answer("لا يوجد صوتيات في قائمة التشغيل", show_alert=True)
             else:
-                await query.answer("في محاولة للتخطي من قائمة التشغيل...")
+                await query.answer("أجرب التخطي من قائمة التشغيل.")
                 await skip()
                 await sleep(1)
             if Config.playlist:
@@ -396,7 +396,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             if not Config.playlist:
                 await query.answer("لا صوتيات يقائمة التشغيل", show_alert=True)
             else:
-                await query.answer("اعادة تشغيل المشغل...")
+                await query.answer("أحاول اعادة تشغيل المشغل")
                 await restart_playout()
                 await sleep(1)
             await query.message.edit_reply_markup(reply_markup=await get_buttons())
@@ -417,7 +417,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 return await query.answer("لا يوجد شيء مشغل", show_alert=True)
             #if not (Config.playlist or Config.STREAM_LINK):
                 #return await query.answer("Startup stream cant be seeked.", show_alert=True)
-            await query.answer("في محاولة للتقدم...")
+            await query.answer("أحاول التقدم")
             data=Config.DATA.get('FILE_DATA')
             if not data.get('dur', 0) or \
                 data.get('dur') == 0:
@@ -432,7 +432,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 return await query.answer("لا شيء مُشغل.", show_alert=True)
             #if not (Config.playlist or Config.STREAM_LINK):
                 #return await query.answer("Startup stream cant be seeked.", show_alert=True)
-            await query.answer("في محاولة للرجوع")
+            await query.answer("أحاول الرجوع")
             data=Config.DATA.get('FILE_DATA')
             if not data.get('dur', 0) or \
                 data.get('dur') == 0:
