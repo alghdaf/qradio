@@ -53,7 +53,7 @@ IST = pytz.timezone(Config.TIME_ZONE)
 if Config.DATABASE_URI:
     from utils import db
 
-HOME_TEXT = "<b>مرحبًا  [{}](tg://user?id={}) \n\n أنا بوت تيليجرام للبث أخص أحدهم فما شأنك هنا؟ إذا احتجت شيئًا تواصل مع @OURPYBOT </b>"
+HOME_TEXT = "<b>Hey  [{}](tg://user?id={}) 🙋‍♂️\n\nIam A Bot Built To Play or Stream Videos In Telegram VoiceChats.\nI Can Stream Any YouTube Video Or A Telegram File Or Even A YouTube Live.</b>"
 admin_filter=filters.create(is_admin) 
 
 @Client.on_message(filters.command(['start', f"start@{Config.BOT_USERNAME}"]))
@@ -63,37 +63,37 @@ async def start(client, message):
             reply_markup=InlineKeyboardMarkup(
                 [
                     [
-                        InlineKeyboardButton(f"التشغيل", callback_data='help_play'),
-                        InlineKeyboardButton(f"الإعدادات", callback_data=f"help_settings"),
-                        InlineKeyboardButton(f"التسجيل", callback_data='help_record'),
+                        InlineKeyboardButton(f"Play", callback_data='help_play'),
+                        InlineKeyboardButton(f"Settings", callback_data=f"help_settings"),
+                        InlineKeyboardButton(f"Recording", callback_data='help_record'),
                     ],
                     [
-                        InlineKeyboardButton("الجدولة", callback_data="help_schedule"),
-                        InlineKeyboardButton("التحكم", callback_data='help_control'),
+                        InlineKeyboardButton("Scheduling", callback_data="help_schedule"),
+                        InlineKeyboardButton("Controling", callback_data='help_control'),
                         InlineKeyboardButton("Admins", callback_data="help_admin"),
                     ],
                     [
                         InlineKeyboardButton(f"Misc", callback_data='help_misc'),
-                        InlineKeyboardButton("إغلاق", callback_data="close"),
+                        InlineKeyboardButton("Close", callback_data="close"),
                     ],
                 ]
                 )
-            await message.reply("تعلم كيفية استخدام qradio ،دليل المساعدة ، اختر من الخيارات أدناه.",
+            await message.reply("Learn to use the VCPlayer, Showing help menu, Choose from the below options.",
                 reply_markup=reply_markup,
                 disable_web_page_preview=True
                 )
         elif 'sch' in message.command[1]:
-            msg=await message.reply("التحقق من الجداول ..")
+            msg=await message.reply("Checking schedules..")
             you, me = message.command[1].split("_", 1)
             who=Config.SCHEDULED_STREAM.get(me)
             if not who:
-                return await msg.edit("ضاع شيء في مكان ما.")
+                return await msg.edit("Something gone somewhere.")
             del Config.SCHEDULED_STREAM[me]
             whom=f"{message.chat.id}_{msg.message_id}"
             Config.SCHEDULED_STREAM[whom] = who
             await sync_to_db()
             if message.from_user.id not in Config.ADMINS:
-                return await msg.edit("طيب da")
+                return await msg.edit("OK da")
             today = datetime.now(IST)
             smonth=today.strftime("%B")
             obj = calendar.Calendar()
@@ -121,20 +121,20 @@ async def start(client, message):
                         k=d    
                     f.append(InlineKeyboardButton(text=f"{k}",callback_data=f"sch_month_{year_}_{month}_{d}"))
                 button.append(f)
-            button.append([InlineKeyboardButton("إغلاق", callback_data="schclose")])
-            await msg.edit(f"اختر اليوم من الشهر الذي تريد جدولة الدردشة الصوتية فيه. \n التاريخ هو {thisday} {smonth} {year}. اختيار التاريخ الذي يسبق اليوم سيعتبر العام المقبل {year+1}", reply_markup=InlineKeyboardMarkup(button))
+            button.append([InlineKeyboardButton("Close", callback_data="schclose")])
+            await msg.edit(f"Choose the day of the month you want to schedule the voicechat.\nToday is {thisday} {smonth} {year}. Chooosing a date preceeding today will be considered as next year {year+1}", reply_markup=InlineKeyboardMarkup(button))
 
 
 
         return
     buttons = [
         [
-            InlineKeyboardButton('أعمل هنا', url='https://t.me/flrbi'),
-            InlineKeyboardButton('🧩 المطور', url='https://instagram.com/alghdaf')
+            InlineKeyboardButton('⚙️ Update Channel', url='https://t.me/subin_works'),
+            InlineKeyboardButton('🧩 Source', url='https://github.com/subinps/VCPlayerBot')
         ],
         [
-            InlineKeyboardButton('👨🏼‍🦯 الدليل', callback_data='help_main'),
-            InlineKeyboardButton('🗑 إغلاق', callback_data='close'),
+            InlineKeyboardButton('👨🏼‍🦯 Help', callback_data='help_main'),
+            InlineKeyboardButton('🗑 Close', callback_data='close'),
         ]
     ]
     reply_markup = InlineKeyboardMarkup(buttons)
@@ -148,25 +148,25 @@ async def show_help(client, message):
     reply_markup=InlineKeyboardMarkup(
         [
             [
-                InlineKeyboardButton("التشغيل", callback_data='help_play'),
-                InlineKeyboardButton("الإعدادات", callback_data=f"help_settings"),
-                InlineKeyboardButton("التسجيل", callback_data='help_record'),
+                InlineKeyboardButton("Play", callback_data='help_play'),
+                InlineKeyboardButton("Settings", callback_data=f"help_settings"),
+                InlineKeyboardButton("Recording", callback_data='help_record'),
             ],
             [
-                InlineKeyboardButton("الجدولة", callback_data="help_schedule"),
-                InlineKeyboardButton("التحكم", callback_data='help_control'),
+                InlineKeyboardButton("Scheduling", callback_data="help_schedule"),
+                InlineKeyboardButton("Controling", callback_data='help_control'),
                 InlineKeyboardButton("Admins", callback_data="help_admin"),
             ],
             [
                 InlineKeyboardButton("Misc", callback_data='help_misc'),
                 InlineKeyboardButton("Config Vars", callback_data='help_env'),
-                InlineKeyboardButton("إغلاق", callback_data="close"),
+                InlineKeyboardButton("Close", callback_data="close"),
             ],
         ]
         )
     if message.chat.type != "private" and message.from_user is None:
         k=await message.reply(
-            text="لا يمكنني مساعدتك هنا ، لأنك مشرف مجهول. ارجع الخاص",
+            text="I cant help you here, since you are an anonymous admin. Get help in PM",
             reply_markup=InlineKeyboardMarkup(
                 [
                     [
@@ -179,7 +179,7 @@ async def show_help(client, message):
     if Config.msg.get('help') is not None:
         await Config.msg['help'].delete()
     Config.msg['help'] = await message.reply_text(
-        "تعلم كيفية استخدام Qradio ، قائمة التعليمات ، اختر من بين الخيارات أدناه.",
+        "Learn to use the VCPlayer, Showing help menu, Choose from the below options.",
         reply_markup=reply_markup,
         disable_web_page_preview=True
         )
@@ -188,21 +188,21 @@ async def show_help(client, message):
 async def repo_(client, message):
     buttons = [
         [
-            InlineKeyboardButton('🧩 المطور ', url='https://instagram.com/alghdaf'),
-            InlineKeyboardButton('هنا حيث أعمل', url='https://t.me/flrbi'),     
+            InlineKeyboardButton('🧩 Repository', url='https://github.com/subinps/VCPlayerBot'),
+            InlineKeyboardButton('⚙️ Update Channel', url='https://t.me/subin_works'),     
         ],
         [
-            InlineKeyboardButton("🎞 همم ", url='https://t.me/alghdaf'),
-            InlineKeyboardButton('🗑 إغلاق', callback_data='close'),
+            InlineKeyboardButton("🎞 How to Deploy", url='https://youtu.be/mnWgZMrNe_0'),
+            InlineKeyboardButton('🗑 Close', callback_data='close'),
         ]
     ]
-    await message.reply("<b>By <a href=https://t.me/alghdaf>alghdaf.</a></b>", reply_markup=InlineKeyboardMarkup(buttons), disable_web_page_preview=True)
+    await message.reply("<b>The source code of this bot is public and can be found at <a href=https://github.com/subinps/VCPlayerBot>VCPlayerBot.</a>\nYou can deploy your own bot and use in your group.\n\nFeel free to star☀️ the repo if you liked it 🙃.</b>", reply_markup=InlineKeyboardMarkup(buttons), disable_web_page_preview=True)
     await delete_messages([message])
 
 @Client.on_message(filters.command(['restart', 'update', f"restart@{Config.BOT_USERNAME}", f"update@{Config.BOT_USERNAME}"]) & admin_filter & chat_filter)
 async def update_handler(client, message):
     if Config.HEROKU_APP:
-        k = await message.reply("وجد مصدر المشروع، يتم إعادة التشغيل للتحديث.")
+        k = await message.reply("Heroku APP found, Restarting app to update.")
         if Config.DATABASE_URI:
             msg = {"msg_id":k.message_id, "chat_id":k.chat.id}
             if not await db.is_saved("RESTART"):
@@ -211,7 +211,7 @@ async def update_handler(client, message):
                 await db.edit_config("RESTART", msg)
             await sync_to_db()
     else:
-        k = await message.reply("لم يتم العثور على تطبيق هيروكو، نحاول اعادة التشغيل.")
+        k = await message.reply("No Heroku APP found, Trying to restart.")
         if Config.DATABASE_URI:
             msg = {"msg_id":k.message_id, "chat_id":k.chat.id}
             if not await db.is_saved("RESTART"):
@@ -238,7 +238,7 @@ async def get_logs(client, message):
 @Client.on_message(filters.command(['env', f"env@{Config.BOT_USERNAME}", "config", f"config@{Config.BOT_USERNAME}"]) & sudo_filter & chat_filter)
 async def set_heroku_var(client, message):
     with suppress(MessageIdInvalid, MessageNotModified):
-        m = await message.reply(".أتحقق من متغيرات الاتصال.")
+        m = await message.reply("Checking config vars..")
         if " " in message.text:
             cmd, env = message.text.split(" ", 1)
             if "=" in env:
@@ -254,31 +254,31 @@ async def set_heroku_var(client, message):
                         "EDIT_TITLE", "RECORDING_DUMP", "RECORDING_TITLE", "IS_VIDEO", "IS_LOOP", "DELAY", "PORTRAIT", 
                         "IS_VIDEO_RECORD", "PTN", "CUSTOM_QUALITY"]
                 if env_ in ENV_VARS:
-                    await m.edit(f"القيمة الحالية للمتغير `{env}` هي `{getattr(Config, env_)}`")
+                    await m.edit(f"Current Value for `{env}`  is `{getattr(Config, env_)}`")
                     await delete_messages([message])
                     return
                 else:
-                    await m.edit("هذه قيمة غير صالحة، عذرًا.")
+                    await m.edit("This is an invalid env value. Read help on env to know about available env vars.")
                     await delete_messages([message, m])
                     return     
             
         else:
-            await m.edit("لم تقدم أي قيمة لـ env ، يجب عليك اتباع التنسيق الصحيح.")
+            await m.edit("You haven't provided any value for env, you should follow the correct format.\nExample: <code>/env CHAT=-1020202020202</code> to change or set CHAT var.\n<code>/env REPLY_MESSAGE= <code>To delete REPLY_MESSAGE.")
             await delete_messages([message, m])
             return
 
         if Config.DATABASE_URI and var in ["STARTUP_STREAM", "CHAT", "LOG_GROUP", "REPLY_MESSAGE", "DELAY", "RECORDING_DUMP", "QUALITY"]:      
-            await m.edit("تم العثور على Mongodb ، إعداد متغيرات التكوين ...")
+            await m.edit("Mongo DB Found, Setting up config vars...")
             await asyncio.sleep(2)  
             if not value:
-                await m.edit(f"لم يتم تحديد قيمة لـ env. في محاولة لحذف القيمة الحالية {var}.")
+                await m.edit(f"No value for env specified. Trying to delete env {var}.")
                 await asyncio.sleep(2)
                 if var in ["STARTUP_STREAM", "CHAT", "DELAY"]:
-                    await m.edit("هذا متغير إلزامي ولا يمكن حذفه.")
+                    await m.edit("This is a mandatory var and cannot be deleted.")
                     await delete_messages([message, m]) 
                     return
                 await edit_config(var, False)
-                await m.edit(f"حُذف بنجاح {var}")
+                await m.edit(f"Sucessfully deleted {var}")
                 await delete_messages([message, m])           
                 return
             else:
@@ -288,7 +288,7 @@ async def set_heroku_var(client, message):
                     except:
                         if var == "QUALITY":
                             if not value.lower() in ["low", "medium", "high"]:
-                                await m.edit("يجب تحديد قيمة بين 10-100.")
+                                await m.edit("You should specify a value between 10 - 100.")
                                 await delete_messages([message, m])
                                 return
                             else:
@@ -300,7 +300,7 @@ async def set_heroku_var(client, message):
                                 elif value == "low":
                                     value = 50
                         else:
-                            await m.edit("يجب أن تعطيني ID إذا. يجب أن يكون عددًا صحيحًا.")
+                            await m.edit("You should give me a chat id . It should be an interger.")
                             await delete_messages([message, m])
                             return
                     if var == "CHAT":
@@ -322,14 +322,14 @@ async def set_heroku_var(client, message):
                             k, reply = await seek_file(0)
                             if k == False:
                                 await restart_playout()
-                    await m.edit(f"غُير بنجاح {var} إلى {value}")
+                    await m.edit(f"Succesfully changed {var} to {value}")
                     await delete_messages([message, m])
                     return
                 else:
                     if var == "STARTUP_STREAM":
                         Config.STREAM_SETUP=False
                     await edit_config(var, value)
-                    await m.edit(f"غُير بنجاح {var} إلى {value}")
+                    await m.edit(f"Succesfully changed {var} to {value}")
                     await delete_messages([message, m])
                     await restart_playout()
                     return
@@ -343,16 +343,16 @@ async def set_heroku_var(client, message):
                 return     
             config = Config.HEROKU_APP.config()
             if not value:
-                await m.edit(f"بما أنه لم تُعطى لي قيمة، في محاولة لحذف القيمة الحالية للمتغير {var}.")
+                await m.edit(f"No value for env specified. Trying to delete env {var}.")
                 await asyncio.sleep(2)
                 if var in ["STARTUP_STREAM", "CHAT", "DELAY", "API_ID", "API_HASH", "BOT_TOKEN", "SESSION_STRING", "ADMINS"]:
-                    await m.edit("هذه متغيرات إلزامية ولا يمكن حذفها.")
+                    await m.edit("These are mandatory vars and cannot be deleted.")
                     await delete_messages([message, m])
                     return
                 if var in config:
-                    await m.edit(f"حُذف بنجاح {var}")
+                    await m.edit(f"Sucessfully deleted {var}")
                     await asyncio.sleep(2)
-                    await m.edit("يتم الآن إعادة تشغيل التطبيق لإجراء تغييرات.")
+                    await m.edit("Now restarting the app to make changes.")
                     if Config.DATABASE_URI:
                         msg = {"msg_id":m.message_id, "chat_id":m.chat.id}
                         if not await db.is_saved("RESTART"):
@@ -362,15 +362,15 @@ async def set_heroku_var(client, message):
                     del config[var]                
                     config[var] = None               
                 else:
-                    k = await m.edit(f"لم يتم العثةر على متغير بإسم {var}. لا شيء للتغيير...")
+                    k = await m.edit(f"No env named {var} found. Nothing was changed.")
                     await delete_messages([message, k])
                 return
             if var in config:
-                await m.edit(f"متغير موجود بالفعل. تم تحريره الآن إلى {value}")
+                await m.edit(f"Variable already found. Now edited to {value}")
             else:
-                await m.edit(f"لم يتم العثور على المتغير ، يتم الآن تعيين متغير جديد.")
+                await m.edit(f"Variable not found, Now setting as new var.")
             await asyncio.sleep(2)
-            await m.edit(f" تم بنجاح تعيين {var} بالقيمة {value}, تتم الآن إعادة التشغيل لترى تأثيرات التغيير...")
+            await m.edit(f"Succesfully set {var} with value {value}, Now Restarting to take effect of changes...")
             if Config.DATABASE_URI:
                 msg = {"msg_id":m.message_id, "chat_id":m.chat.id}
                 if not await db.is_saved("RESTART"):

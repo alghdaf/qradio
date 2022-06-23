@@ -63,21 +63,21 @@ async def schedule_vc(bot, message):
         type=""
         yturl=""
         ysearch=""
-        msg = await message.reply_text("⚡️ ** التحقق من المدخلات المتلقاة ..**")
+        msg = await message.reply_text("⚡️ **Checking recived input..**")
         if message.reply_to_message and message.reply_to_message.video:
-            await msg.edit("⚡️ **يتم التحقق من المدخلات المتلقاة ....**")
+            await msg.edit("⚡️ **Checking Telegram Media...**")
             type='video'
             m_video = message.reply_to_message.video       
         elif message.reply_to_message and message.reply_to_message.document:
-            await msg.edit("⚡️ **يتم التحقق من المدخلات المتلقاة ....**")
+            await msg.edit("⚡️ **Checking Telegram Media...**")
             m_video = message.reply_to_message.document
             type='video'
             if not "video" in m_video.mime_type:
-                return await msg.edit("هذا المعطى غير صالح")
+                return await msg.edit("The given file is invalid")
         elif message.reply_to_message and message.reply_to_message.audio:
             #if not Config.IS_VIDEO:
                 #return await message.reply("Play from audio file is available only if Video Mode if turned off.\nUse /settings to configure ypur player.")
-            await msg.edit("⚡️ **يتم التحقق من المدخلات المتلقاة ....**")
+            await msg.edit("⚡️ **Checking Telegram Media...**")
             type='audio'
             m_video = message.reply_to_message.audio       
         else:
@@ -87,7 +87,7 @@ async def schedule_vc(bot, message):
                 text = message.text.split(" ", 1)
                 query = text[1]
             else:
-                await msg.edit("أنت لم تعطني أي شيء للجدولة. قم بالرد على مقطع فيديو أو رابط youtube أو رابط مباشر.")
+                await msg.edit("You Didn't gave me anything to schedule. Reply to a video or a youtube link or a direct link.")
                 await delete_messages([message, msg])
                 return
             regex = r"^(?:https?:\/\/)?(?:www\.)?youtu\.?be(?:\.com)?\/?.*(?:watch|embed)?(?:.*v=|v\/|\/)([\w\-_]+)\&?"
@@ -102,7 +102,7 @@ async def schedule_vc(bot, message):
                         type="ytdl_s"
                         url=query
                     else:
-                        await msg.edit("رابط خاطئ, زودني برابط مباشر أو رابط youtube.")
+                        await msg.edit("This is an invalid link, provide me a direct link or a youtube link.")
                         await delete_messages([message, msg])
                         return
                 type="direct"
@@ -111,10 +111,10 @@ async def schedule_vc(bot, message):
                 type="query"
                 ysearch=query
         if not message.from_user is None:
-            user=f"[{message.from_user.first_name}](tg://user?id={message.from_user.id}) - (المُقرر)"
+            user=f"[{message.from_user.first_name}](tg://user?id={message.from_user.id}) - (Scheduled)"
             user_id = message.from_user.id
         else:
-            user="مجهول - (Scheduled)"
+            user="Anonymous - (Scheduled)"
             user_id = "anonymous_admin"
         now = datetime.now()
         nyav = now.strftime("%d-%m-%Y-%H:%M:%S")
@@ -148,11 +148,11 @@ async def schedule_vc(bot, message):
             await sync_to_db()
         elif type in ["youtube", "query", "ytdl_s"]:
             if type=="youtube":
-                await msg.edit("⚡️ **إحضار الفيديو من YouTube ....**")
+                await msg.edit("⚡️ **Fetching Video From YouTube...**")
                 url=yturl
             elif type=="query":
                 try:
-                    await msg.edit("⚡️ **إحضار الفيديو من YouTube ....**")
+                    await msg.edit("⚡️ **Fetching Video From YouTube...**")
                     ytquery=ysearch
                     results = YoutubeSearch(ytquery, max_results=1).to_dict()
                     url = f"https://youtube.com{results[0]['url_suffix']}"
@@ -203,7 +203,7 @@ async def schedule_vc(bot, message):
             await sync_to_db()
         if message.chat.type!='private' and message.from_user is None:
             await msg.edit(
-                text="لا يمكنك تحديد موعد من هنا لأنك مسؤول مجهول. انقر فوق زر الجدولة للجدولة من خلال الدردشة الخاصة.",
+                text="You cant schedule from here since you are an anonymous admin. Click the schedule button to schedule through private chat.",
                 reply_markup=InlineKeyboardMarkup(
                     [
                         [
@@ -240,32 +240,32 @@ async def schedule_vc(bot, message):
                     k=d    
                 f.append(InlineKeyboardButton(text=f"{k}",callback_data=f"sch_month_{year_}_{month}_{d}"))
             button.append(f)
-        button.append([InlineKeyboardButton("إغلاق", callback_data="schclose")])
-        await msg.edit(f"اختر اليوم من الشهر الذي تريد جدولة الدردشة الصوتية فيه. \n اليوم هو {thisday} {smonth} {year}. اختيار التاريخ الذي يسبق اليوم سيعتبر العام المقبل {year+1}", reply_markup=InlineKeyboardMarkup(button))
+        button.append([InlineKeyboardButton("Close", callback_data="schclose")])
+        await msg.edit(f"Choose the day of the month you want to schedule the voicechat.\nToday is {thisday} {smonth} {year}. Chooosing a date preceeding today will be considered as next year {year+1}", reply_markup=InlineKeyboardMarkup(button))
 
 
 
 
 @Client.on_message(filters.command(["slist", f"slist@{Config.BOT_USERNAME}"]) & admin_filter & chat_filter)
 async def list_schedule(bot, message):
-    k=await message.reply("جاري التحقق من الجداول ...")
+    k=await message.reply("Checking schedules...")
     if not Config.SCHEDULE_LIST:
-        await k.edit("لا شيء مجدول للتشغيل.")
+        await k.edit("Nothing scheduled to play.")
         await delete_messages([k, message])
         return
-    text="الجداول الحالية:\n\n"
+    text="Current Schedules:\n\n"
     s=Config.SCHEDULE_LIST
     f=1
     for sch in s:
         details=Config.SCHEDULED_STREAM.get(sch['job_id'])
         if not details['3']=="telegram":
-            text+=f"<b>{f}.</b> العنوان: [{details['1']}]({details['2']}) بواسطة {details['4']}\n"
+            text+=f"<b>{f}.</b> Title: [{details['1']}]({details['2']}) By {details['4']}\n"
         else:
-            text+=f"<b>{f}.</b> العنوان: {details['1']} بواسطة {details['4']}\n"
+            text+=f"<b>{f}.</b> Title: {details['1']} By {details['4']}\n"
         date = sch['date']
         f+=1
         date_=((pytz.utc.localize(date, is_dst=None).astimezone(IST)).replace(tzinfo=None)).strftime("%b %d %Y, %I:%M %p")
-        text+=f"معرف المجدول : <code>{sch['job_id']}</code>\nتاريخ الجدول الزمني : <code>{date_}</code>\n\n"
+        text+=f"Shedule ID : <code>{sch['job_id']}</code>\nSchedule Date : <code>{date_}</code>\n\n"
 
     await k.edit(text, disable_web_page_preview=True)
     await delete_messages([message])
@@ -274,23 +274,23 @@ async def list_schedule(bot, message):
 @Client.on_message(filters.command(["cancel", f"cancel@{Config.BOT_USERNAME}"]) & admin_filter & chat_filter)
 async def delete_sch(bot, message):
     with suppress(MessageIdInvalid, MessageNotModified):
-        m = await message.reply("البحث عن البث المجدول ..")
+        m = await message.reply("Finding the scheduled stream..")
         if " " in message.text:
             cmd, job_id = message.text.split(" ", 1)
         else:
             buttons = [
                 [
-                    InlineKeyboardButton('إلغاء كافة الجداول', callback_data='schcancel'),
-                    InlineKeyboardButton('لا', callback_data='schclose'),
+                    InlineKeyboardButton('Cancel All Schedules', callback_data='schcancel'),
+                    InlineKeyboardButton('No', callback_data='schclose'),
                 ]
             ]
             reply_markup = InlineKeyboardMarkup(buttons)
-            await m.edit("لم يتم تحديد معرف الجدول !! هل تريد إلغاء كل التدفقات المجدولة؟ أو يمكنك العثور على معرف الجدول باستخدام الأمر /slist.", reply_markup=reply_markup)
+            await m.edit("No Schedule ID  specified!! Do you want to Cancel all scheduled streams? or you can find schedul id using /slist command.", reply_markup=reply_markup)
             await delete_messages([message])
             return
         data=Config.SCHEDULED_STREAM.get(job_id)
         if not data:
-            await m.edit("لقد أعطيتني معرف جدول غير صالح ، تحقق مرة أخرى وأرسل.")
+            await m.edit("You gave me an invalid schedule ID, check again and send.")
             await delete_messages([message, m])
             return
         del Config.SCHEDULED_STREAM[job_id]
@@ -302,19 +302,19 @@ async def delete_sch(bot, message):
             for old_ in old:
                 Config.SCHEDULE_LIST.remove(old_)
         await sync_to_db()
-        await m.edit(f"حذف بنجاح {data['1']} من الجدول.")
+        await m.edit(f"Succesfully deleted {data['1']} from scheduled list.")
         await delete_messages([message, m])
         
 @Client.on_message(filters.command(["cancelall", f"cancelall@{Config.BOT_USERNAME}"]) & admin_filter & chat_filter)
 async def delete_all_sch(bot, message):
     buttons = [
         [
-            InlineKeyboardButton('الغاء كافة الجداول', callback_data='schcancel'),
-            InlineKeyboardButton('لا', callback_data='schclose'),
+            InlineKeyboardButton('Cancel All Schedules', callback_data='schcancel'),
+            InlineKeyboardButton('No', callback_data='schclose'),
         ]
     ]
     reply_markup = InlineKeyboardMarkup(buttons)
-    await message.reply("هل تريد إلغاء جميع البثوث المجدولة؟ㅤㅤㅤㅤ ㅤ", reply_markup=reply_markup)
+    await message.reply("Do you want to cancel all the scheduled streams?ㅤㅤㅤㅤ ㅤ", reply_markup=reply_markup)
     await delete_messages([message])
 
 

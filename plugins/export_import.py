@@ -44,13 +44,13 @@ admin_filter=filters.create(is_admin)
 @Client.on_message(filters.command(["export", f"export@{Config.BOT_USERNAME}"]) & admin_filter & chat_filter)
 async def export_play_list(client, message: Message):
     if not Config.playlist:
-        k=await message.reply_text("قائمة التشغيل فارغة.")
+        k=await message.reply_text("Playlist is Empty")
         await delete_messages([message, k])
         return
     file=f"{message.chat.id}_{message.message_id}.json"
     with open(file, 'w+') as outfile:
         json.dump(Config.playlist, outfile, indent=4)
-    await client.send_document(chat_id=message.chat.id, document=file, file_name="PlayList.json", caption=f"Playlist\n\nعدد الأغاني: <code>{len(Config.playlist)}</code>")
+    await client.send_document(chat_id=message.chat.id, document=file, file_name="PlayList.json", caption=f"Playlist\n\nNumber Of Songs: <code>{len(Config.playlist)}</code>\n\nJoin [XTZ Bots](https://t.me/subin_works)")
     try:
         os.remove(file)
     except:
@@ -62,14 +62,14 @@ async def import_playlist(client, m: Message):
     with suppress(MessageIdInvalid, MessageNotModified):
         if m.reply_to_message is not None and m.reply_to_message.document:
             if m.reply_to_message.document.file_name != "PlayList.json":
-                k=await m.reply("تم تقديم ملف قائمة تشغيل غير صالح. قم بتصدير قائمة التشغيل الحالية باستخدام /export .")
+                k=await m.reply("Invalid PlayList file given. Export your current Playlist using /export.")
                 await delete_messages([m, k])
                 return
             myplaylist=await m.reply_to_message.download()
-            status=await m.reply("أحاول الحصول على تفاصيل قائمة التشغيل.")
+            status=await m.reply("Trying to get details from playlist.")
             n=await import_play_list(myplaylist)
             if not n:
-                await status.edit("حدثت أخطاء أثناء استيراد قائمة التشغيل.")
+                await status.edit("Errors Occured while importing playlist.")
                 await delete_messages([m, status])
                 return
             if Config.SHUFFLE:
@@ -85,5 +85,5 @@ async def import_playlist(client, m: Message):
             else:
                 await delete_messages([m, status])
         else:
-            k = await m.reply("لم يتم تقديم ملف لقائمة التشغيل.")
+            k = await m.reply("No playList file given.")
             await delete_messages([m, k])
