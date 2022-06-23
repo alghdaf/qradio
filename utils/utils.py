@@ -182,7 +182,7 @@ async def run_schedule(job_id):
             if not await start_scheduled():
                 LOGGER.error("Scheduled stream skipped, Reason - Unable to start a voice chat.")
                 return
-        data_ = [{1:data['1'], 2:data['2'], 3:data['3'], 4:data['6'], 5:data['5']}] #كانت 4 عن 6
+        data_ = [{1:data['1'], 2:data['2'], 3:data['3'], 4:data['4'], 5:data['5']}]
         Config.playlist = data_ + Config.playlist
         await play()
         LOGGER.info("Starting Scheduled Stream")
@@ -216,7 +216,7 @@ async def skip():
         return
     elif not Config.playlist \
         and Config.IS_LOOP:
-        LOGGER.info("Loop Play enabled, switching to STARTUP_STREAM, since قائمة التشغيل فارغة.")
+        LOGGER.info("Loop Play enabled, switching to STARTUP_STREAM, since playlist is empty.")
         await start_stream()
         return
     elif not Config.playlist \
@@ -869,8 +869,8 @@ async def chek_the_media(link, seek=False, pic=False, title="Music"):
                 is_audio_ = False
                 LOGGER.error("Unable to get Audio properties within time.")
             if is_audio_:
-                pic_=await bot.get_messages("ikerw", 104)
-                photo = "./pic/photoo"
+                pic_=await bot.get_messages("DumpPlaylist", 30)
+                photo = "./pic/photo"
                 if not os.path.exists(photo):
                     photo = await pic_.download(file_name=photo)
                 try:
@@ -1447,23 +1447,23 @@ sudo_filter=filters.create(sudo_users)
 
 async def get_playlist_str():
     if not Config.CALL_STATUS:
-        pl="المشغل في وضع الخمول ولا توجد أغنية قيد التشغيل.ㅤㅤㅤㅤ"
+        pl="Player is idle and no song is playing.ㅤㅤㅤㅤ"
     if Config.STREAM_LINK:
-        pl = f"🔈 يُبث [Live Stream]({Config.STREAM_LINK}) ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ"
+        pl = f"🔈 Streaming [Live Stream]({Config.STREAM_LINK}) ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ"
     elif not Config.playlist:
-        pl = f"🔈 قائمة التشغيل فارغة. يُبث [STARTUP_STREAM]({Config.STREAM_URL})ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ"
+        pl = f"🔈 Playlist is empty. Streaming [STARTUP_STREAM]({Config.STREAM_URL})ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ"
     else:
         if len(Config.playlist)>=25:
             tplaylist=Config.playlist[:25]
             pl=f"Listing first 25 songs of total {len(Config.playlist)} songs.\n"
             pl += f"▶️ **Playlist**: ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ\n" + "\n".join([
-                f"**{i}**. **🎸{x[1]}**\n   👤**طُلب بواسطة:** {x[4]}"
+                f"**{i}**. **🎸{x[1]}**\n   👤**Requested by:** {x[4]}"
                 for i, x in enumerate(tplaylist)
                 ])
             tplaylist.clear()
         else:
             pl = f"▶️ **Playlist**: ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ\n" + "\n".join([
-                f"**{i}**. **🎸{x[1]}**\n   👤**طُلب بواسطة:** {x[4]}\n"
+                f"**{i}**. **🎸{x[1]}**\n   👤**Requested by:** {x[4]}\n"
                 for i, x in enumerate(Config.playlist)
             ])
     return pl
@@ -1476,8 +1476,8 @@ async def get_buttons():
         reply_markup=InlineKeyboardMarkup(
             [
                 [
-                    InlineKeyboardButton(f"بدء المُشغل", callback_data="restart"),
-                    InlineKeyboardButton('🗑 إغلاق ', callback_data='close'),
+                    InlineKeyboardButton(f"🎸 Start the Player", callback_data="restart"),
+                    InlineKeyboardButton('🗑 Close', callback_data='close'),
                 ],
             ]
             )
@@ -1489,8 +1489,8 @@ async def get_buttons():
                 ],
                 [
                     InlineKeyboardButton(f"⏯ {get_pause(Config.PAUSE)}", callback_data=f"{get_pause(Config.PAUSE)}"),
-                    InlineKeyboardButton('🔊 مستوى الصوت', callback_data='volume_main'),
-                    InlineKeyboardButton('🗑 إغلاق ', callback_data='close'),
+                    InlineKeyboardButton('🔊 Volume Control', callback_data='volume_main'),
+                    InlineKeyboardButton('🗑 Close', callback_data='close'),
                 ],
             ]
             )
@@ -1501,18 +1501,18 @@ async def get_buttons():
                     InlineKeyboardButton(f"{get_player_string()}", callback_data='info_player'),
                 ],
                 [
-                    InlineKeyboardButton("⏮ رجوع 5", callback_data='rewind'),
+                    InlineKeyboardButton("⏮ Rewind", callback_data='rewind'),
                     InlineKeyboardButton(f"⏯ {get_pause(Config.PAUSE)}", callback_data=f"{get_pause(Config.PAUSE)}"),
-                    InlineKeyboardButton(f"⏭ تخطي 5", callback_data='seek'),
+                    InlineKeyboardButton(f"⏭ Seek", callback_data='seek'),
                 ],
                 [
-                    InlineKeyboardButton("🔄 عشوائي", callback_data="shuffle"),
-                    InlineKeyboardButton("⏩ التالي", callback_data="skip"),
-                    InlineKeyboardButton("⏮ اعادة تشغيل", callback_data="replay"),
+                    InlineKeyboardButton("🔄 Shuffle", callback_data="shuffle"),
+                    InlineKeyboardButton("⏩ Skip", callback_data="skip"),
+                    InlineKeyboardButton("⏮ Replay", callback_data="replay"),
                 ],
                 [
-                    InlineKeyboardButton('🔊 مستوى الصوت', callback_data='volume_main'),
-                    InlineKeyboardButton('🗑 إغلاق ', callback_data='close'),
+                    InlineKeyboardButton('🔊 Volume Control', callback_data='volume_main'),
+                    InlineKeyboardButton('🗑 Close', callback_data='close'),
                 ]
             ]
             )
@@ -1523,31 +1523,31 @@ async def settings_panel():
     reply_markup=InlineKeyboardMarkup(
         [
             [
-               InlineKeyboardButton(f"وضع المُشغل", callback_data='info_mode'),
-               InlineKeyboardButton(f"{'🔂 إذاعة' if Config.IS_LOOP else '▶️ تشغيل ومغادرة'}", callback_data='is_loop'),
+               InlineKeyboardButton(f"Player Mode", callback_data='info_mode'),
+               InlineKeyboardButton(f"{'🔂 Non Stop Playback' if Config.IS_LOOP else '▶️ Play and Leave'}", callback_data='is_loop'),
             ],
             [
-                InlineKeyboardButton("🎞 الفيديو", callback_data=f"info_video"),
-                InlineKeyboardButton(f"{'📺 مُفعل ' if Config.IS_VIDEO else '🎙 مُعطل '}", callback_data='is_video'),
+                InlineKeyboardButton("🎞 Video", callback_data=f"info_video"),
+                InlineKeyboardButton(f"{'📺 Enabled' if Config.IS_VIDEO else '🎙 Disabled'}", callback_data='is_video'),
             ],
             [
-                InlineKeyboardButton("🤴 المسؤولين فقط", callback_data=f"info_admin"),
-                InlineKeyboardButton(f"{'🔒 مُفعل ' if Config.ADMIN_ONLY else '🔓 مُعطل '}", callback_data='admin_only'),
+                InlineKeyboardButton("🤴 Admin Only", callback_data=f"info_admin"),
+                InlineKeyboardButton(f"{'🔒 Enabled' if Config.ADMIN_ONLY else '🔓 Disabled'}", callback_data='admin_only'),
             ],
             [
-                InlineKeyboardButton("🪶 تعديل العنوان", callback_data=f"info_title"),
-                InlineKeyboardButton(f"{'✏️ مُفعل ' if Config.EDIT_TITLE else '🚫 مُعطل '}", callback_data='edit_title'),
+                InlineKeyboardButton("🪶 Edit Title", callback_data=f"info_title"),
+                InlineKeyboardButton(f"{'✏️ Enabled' if Config.EDIT_TITLE else '🚫 Disabled'}", callback_data='edit_title'),
             ],
             [
-                InlineKeyboardButton("🔀 المُشغل العشوائي", callback_data=f"info_shuffle"),
-                InlineKeyboardButton(f"{'✅ مُفعل ' if Config.SHUFFLE else '🚫 مُعطل '}", callback_data='set_shuffle'),
+                InlineKeyboardButton("🔀 Shuffle Mode", callback_data=f"info_shuffle"),
+                InlineKeyboardButton(f"{'✅ Enabled' if Config.SHUFFLE else '🚫 Disabled'}", callback_data='set_shuffle'),
             ],
             [
-                InlineKeyboardButton("👮 الرد تلقائي", callback_data=f"info_reply"),
-                InlineKeyboardButton(f"{'✅ مُفعل ' if Config.REPLY_PM else '🚫 مُعطل '}", callback_data='reply_msg'),
+                InlineKeyboardButton("👮 Auto Reply (PM Permit)", callback_data=f"info_reply"),
+                InlineKeyboardButton(f"{'✅ Enabled' if Config.REPLY_PM else '🚫 Disabled'}", callback_data='reply_msg'),
             ],
             [
-                InlineKeyboardButton('🗑 إغلاق ', callback_data='close'),
+                InlineKeyboardButton('🗑 Close', callback_data='close'),
             ]
             
         ]
@@ -1560,26 +1560,26 @@ async def recorder_settings():
     reply_markup=InlineKeyboardMarkup(
         [
         [
-            InlineKeyboardButton(f"{'⏹ إيقاف التسجيل' if Config.IS_RECORDING else '⏺ بدء التسجيل'}", callback_data='record'),
+            InlineKeyboardButton(f"{'⏹ Stop Recording' if Config.IS_RECORDING else '⏺ Start Recording'}", callback_data='record'),
         ],
         [
-            InlineKeyboardButton(f"تسجيل فيديو", callback_data='info_videorecord'),
-            InlineKeyboardButton(f"{'مفعل' if Config.IS_VIDEO_RECORD else 'معطل'}", callback_data='record_video'),
+            InlineKeyboardButton(f"Record Video", callback_data='info_videorecord'),
+            InlineKeyboardButton(f"{'Enabled' if Config.IS_VIDEO_RECORD else 'Disabled'}", callback_data='record_video'),
         ],
         [
-            InlineKeyboardButton(f"قياسات تسجيل الفيديو", callback_data='info_videodimension'),
+            InlineKeyboardButton(f"Video Dimension", callback_data='info_videodimension'),
             InlineKeyboardButton(f"{'Portrait' if Config.PORTRAIT else 'Landscape'}", callback_data='record_dim'),
         ],
         [
-            InlineKeyboardButton(f"عنوان التسجيل المخصص", callback_data='info_rectitle'),
+            InlineKeyboardButton(f"Custom Recording Title", callback_data='info_rectitle'),
             InlineKeyboardButton(f"{Config.RECORDING_TITLE if Config.RECORDING_TITLE else 'Default'}", callback_data='info_rectitle'),
         ],
         [
-            InlineKeyboardButton(f"قناة حفظ التسجيلات", callback_data='info_recdumb'),
-            InlineKeyboardButton(f"{Config.RECORDING_DUMP if Config.RECORDING_DUMP else 'غير محدد'}", callback_data='info_recdumb'),
+            InlineKeyboardButton(f"Recording Dump Channel", callback_data='info_recdumb'),
+            InlineKeyboardButton(f"{Config.RECORDING_DUMP if Config.RECORDING_DUMP else 'Not Dumping'}", callback_data='info_recdumb'),
         ],
         [
-            InlineKeyboardButton('🗑 إغلاق ', callback_data='close'),
+            InlineKeyboardButton('🗑 Close', callback_data='close'),
         ]
         ]
     )
@@ -1598,8 +1598,8 @@ async def volume_buttons():
             InlineKeyboardButton(f"+ 10", callback_data='volume_add'),
         ],
         [
-            InlineKeyboardButton(f"🔙 رجوع ", callback_data='volume_back'),
-            InlineKeyboardButton('🗑 إغلاق ', callback_data='close'),
+            InlineKeyboardButton(f"🔙 Back", callback_data='volume_back'),
+            InlineKeyboardButton('🗑 Close', callback_data='close'),
         ]
         ]
     )
@@ -1793,9 +1793,9 @@ def convert(seconds):
 
 def get_pause(status):
     if status == True:
-        return "تشغيل"
+        return "Resume"
     else:
-        return "إيقاف"
+        return "Pause"
 
 #https://github.com/pytgcalls/pytgcalls/blob/dev/pytgcalls/types/input_stream/video_tools.py#L27-L38
 def resize_ratio(w, h, factor):
@@ -1819,17 +1819,17 @@ def stop_and_restart():
     os.execl(sys.executable, sys.executable, *sys.argv)
 
 
-def get_image(title, pic, dur="Liv"):
+def get_image(title, pic, dur="Live"):
     newimage = "converted.jpg"
     image = Image.open(pic) 
     draw = ImageDraw.Draw(image) 
     font = ImageFont.truetype('./utils/font.ttf', 60)
     title = title[0:45]
-    MAX_W = 1000
+    MAX_W = 1790
     dur=convert(int(float(dur)))
     if dur=="0:00:00":
-        dur = "بث مباشر"
-    para=[f'يُبث: {title}', f'مدة: {dur}']
+        dur = "Live Stream"
+    para=[f'Playing: {title}', f'Duration: {dur}']
     current_h, pad = 450, 20
     for line in para:
         w, h = draw.textsize(line, font=font)
